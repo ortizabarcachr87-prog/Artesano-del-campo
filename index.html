@@ -7,282 +7,312 @@
     <style>
         /* ================= PALETA DE COLORES ================= */
         :root {
-            --fondo: #181818;       /* Negro campo/grafito */
-            --madera: #A0522D;      /* Tono madera rústica */
-            --madera-oscura: #8b4513;
-            --fierro: #333333;      /* Gris metálico oscuro */
-            --verde: #2d5a27;       /* Verde campo */
-            --texto: #e0e0e0;       /* Gris claro */
+            --fondo: #121212;       
+            --madera: #A0522D;      
+            --madera-oscura: #7c3f1e;
+            --fierro: #2c2c2c;      
+            --verde: #2d5a27;       
+            --texto: #f0f0f0;       
             --blanco: #ffffff;
+            --rojo: #a93226;        
         }
 
-        /* ================= ESTILOS GENERALES ================= */
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Verdana', sans-serif; }
-        body { background-color: var(--fondo); color: var(--texto); padding-bottom: 90px; }
+        body { background-color: var(--fondo); color: var(--texto); padding-bottom: 100px; }
 
-        /* ================= CABECERA / LOGO ================= */
+        /* ================= CABECERA CON LOGO REAL ================= */
         header {
             background-color: var(--fondo);
-            border-bottom: 3px solid var(--fierro);
+            border-bottom: 3px solid var(--madera);
             padding: 15px;
             text-align: center;
             position: sticky; top: 0; z-index: 50;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.7);
         }
-        .logo-caja {
-            display: inline-block; padding: 8px 15px;
-            border: 2px solid var(--fierro); border-radius: 8px;
-            background-color: rgba(255,255,255,0.02);
+        .logo-img {
+            width: 130px;
+            height: 130px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid var(--madera);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.8);
         }
-        .logo-icono { font-size: 1.8rem; color: var(--verde); display: block; margin-bottom: 2px; }
-        .logo-titulo { font-size: 1.2rem; font-weight: bold; color: var(--texto); text-transform: uppercase; letter-spacing: 1px; display: block; }
-        .logo-sub { font-size: 0.8rem; color: var(--madera); font-weight: bold; text-transform: uppercase; }
 
         /* ================= SECCIONES Y CATÁLOGO ================= */
         .categoria-titulo {
             background-color: var(--fierro); color: var(--blanco);
-            padding: 10px 15px; margin: 20px 0 10px 0;
-            font-size: 1.1rem; text-transform: uppercase; border-left: 5px solid var(--madera);
+            padding: 12px 15px; margin: 25px 0 12px 0;
+            font-size: 1.1rem; text-transform: uppercase; border-left: 6px solid var(--madera);
+            letter-spacing: 1px;
         }
         
         .grilla-productos {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 15px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 12px;
         }
 
         .tarjeta-producto {
-            background-color: #222222; border: 1px solid var(--fierro); border-radius: 10px;
+            background-color: #1a1a1a; border: 1px solid #333; border-radius: 12px;
             overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;
+            position: relative; box-shadow: 0 4px 8px rgba(0,0,0,0.4);
         }
-        /* Espacio para tus fotos */
-        .foto-placeholder {
-            width: 100%; height: 120px; background-color: var(--fierro);
-            display: flex; align-items: center; justify-content: center;
-            color: #666; font-size: 0.8rem; font-style: italic;
-        }
-        /* Cuando subas fotos reales, usarás la etiqueta img en vez del placeholder */
-        .foto-real { width: 100%; height: 120px; object-fit: cover; }
 
-        .info-producto { padding: 10px; text-align: center; }
-        .nombre-producto { font-size: 0.9rem; font-weight: bold; color: var(--texto); margin-bottom: 5px; height: 35px; }
-        .precio-producto { color: var(--madera); font-weight: bold; font-size: 1.1rem; margin-bottom: 10px; }
+        /* Etiqueta de Producto Nuevo */
+        .etiqueta-nuevo {
+            position: absolute; top: 8px; right: 8px;
+            background-color: var(--madera); color: white;
+            padding: 3px 8px; border-radius: 4px; font-size: 0.65rem;
+            font-weight: bold; text-transform: uppercase; z-index: 2;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.6);
+        }
+
+        /* Contenedor de foto para que NUNCA se deforme */
+        .contenedor-foto {
+            width: 100%;
+            height: 140px;
+            background-color: #000;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .foto-real { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; /* Mantiene la proporción perfecta sin estirarse */
+            transition: transform 0.3s ease;
+        }
+
+        .info-producto { padding: 12px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1; }
+        .nombre-producto { font-size: 0.85rem; font-weight: bold; color: var(--texto); margin-bottom: 8px; line-height: 1.2; }
+        .precio-producto { color: #d4a373; font-weight: bold; font-size: 1.05rem; margin-bottom: 12px; }
         
         .btn-agregar {
             background-color: var(--madera); color: var(--blanco);
-            border: none; padding: 8px; width: 100%; border-radius: 6px;
-            font-weight: bold; font-size: 1rem; cursor: pointer;
+            border: none; padding: 10px; width: 100%; border-radius: 8px;
+            font-weight: bold; font-size: 0.95rem; cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
-        .btn-agregar:active { background-color: var(--madera-oscura); }
+        .btn-agregar:active { background-color: var(--madera-oscura); transform: scale(0.98); }
 
         /* ================= BARRA INFERIOR (VER PEDIDO) ================= */
         .barra-carrito {
             position: fixed; bottom: 0; left: 0; width: 100%;
             background-color: var(--verde); color: var(--blanco);
-            padding: 15px 20px; display: flex; justify-content: space-between;
+            padding: 16px 20px; display: flex; justify-content: space-between;
             align-items: center; font-size: 1.1rem; font-weight: bold;
-            cursor: pointer; z-index: 90; display: none; /* Oculto si está vacío */
-            box-shadow: 0 -4px 10px rgba(0,0,0,0.5);
+            cursor: pointer; z-index: 90; display: none;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.6);
+            border-top: 2px solid #388e3c;
         }
 
         /* ================= MODAL DEL CARRITO ================= */
         .modal-fondo {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.8); z-index: 100;
+            background-color: rgba(0,0,0,0.85); z-index: 100;
             display: none; justify-content: center; align-items: flex-end;
         }
         .modal-contenido {
-            background-color: var(--fondo); width: 100%; max-height: 85vh;
-            border-top: 3px solid var(--madera); border-radius: 20px 20px 0 0;
+            background-color: #1e1e1e; width: 100%; max-height: 85vh;
+            border-top: 4px solid var(--madera); border-radius: 24px 24px 0 0;
             padding: 20px; overflow-y: auto; color: var(--texto);
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.8);
         }
-        .modal-cabecera { display: flex; justify-content: space-between; border-bottom: 1px solid var(--fierro); padding-bottom: 15px; margin-bottom: 15px; }
-        .modal-cabecera h2 { color: var(--madera); font-size: 1.3rem; margin: 0; }
-        .btn-cerrar { background: none; border: none; color: var(--texto); font-size: 1.5rem; cursor: pointer; font-weight: bold; }
+        .modal-cabecera { display: flex; justify-content: space-between; border-bottom: 1px solid #333; padding-bottom: 12px; margin-bottom: 15px; align-items: center; }
+        .modal-cabecera h2 { color: #d4a373; font-size: 1.3rem; margin: 0; }
+        .btn-cerrar { background: none; border: none; color: var(--texto); font-size: 1.6rem; cursor: pointer; font-weight: bold; }
 
-        .item-carrito { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--fierro); padding: 10px 0; }
-        .controles-cantidad { display: flex; align-items: center; gap: 10px; }
-        .btn-cant { background-color: var(--fierro); color: var(--texto); border: none; width: 30px; height: 30px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        .item-carrito { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #2a2a2a; padding: 12px 0; }
+        .controles-cantidad { display: flex; align-items: center; gap: 8px; }
+        .btn-cant { background-color: #333; color: var(--texto); border: none; width: 30px; height: 30px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 1rem; }
+        
+        .btn-eliminar-item { background-color: rgba(169, 50, 38, 0.25); color: #e74c3c; border: 1px solid #a93226; width: 30px; height: 30px; border-radius: 6px; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
         .opciones-entrega { display: flex; gap: 10px; margin: 20px 0; }
-        .btn-entrega { flex: 1; padding: 10px; background-color: var(--fierro); color: var(--texto); border: 2px solid transparent; border-radius: 8px; font-weight: bold; cursor: pointer; }
-        .btn-entrega.activo { background-color: rgba(160, 82, 45, 0.2); border-color: var(--madera); color: var(--madera); }
+        .btn-entrega { flex: 1; padding: 12px; background-color: #2a2a2a; color: var(--texto); border: 2px solid transparent; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 0.95rem; }
+        .btn-entrega.activo { background-color: rgba(160, 82, 45, 0.25); border-color: var(--madera); color: #d4a373; }
 
-        .nota-delivery { font-size: 0.8rem; color: #aaa; text-align: center; margin-bottom: 15px; }
+        .nota-delivery { font-size: 0.85rem; color: #aaa; text-align: center; margin-bottom: 15px; }
+        .total-final { display: flex; justify-content: space-between; font-size: 1.3rem; font-weight: bold; color: #a3e635; margin-bottom: 20px; border-top: 1px solid #333; padding-top: 15px; }
 
-        .total-final { display: flex; justify-content: space-between; font-size: 1.3rem; font-weight: bold; color: var(--verde); margin-bottom: 20px; }
+        .btn-whatsapp { background-color: var(--verde); color: var(--blanco); border: none; padding: 14px; width: 100%; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-bottom: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .btn-imprimir { background-color: #2a2a2a; color: var(--texto); border: none; padding: 10px; width: 100%; border-radius: 8px; font-size: 0.9rem; cursor: pointer; }
 
-        .btn-whatsapp { background-color: var(--verde); color: var(--blanco); border: none; padding: 15px; width: 100%; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-bottom: 10px; }
-        .btn-imprimir { background-color: var(--fierro); color: var(--texto); border: none; padding: 10px; width: 100%; border-radius: 8px; font-size: 0.9rem; cursor: pointer; }
-
-        /* ================= FORMATO DE IMPRESIÓN (COMANDA) ================= */
         #ticket-impresion { display: none; }
         @media print {
             body * { visibility: hidden; }
             #ticket-impresion, #ticket-impresion * { visibility: visible; }
             #ticket-impresion {
                 display: block; position: absolute; left: 0; top: 0;
-                width: 100%; background: white; color: black; font-family: monospace;
-                padding: 10px;
+                width: 100%; background: white; color: black; font-family: monospace; padding: 10px;
             }
-            .ocultar-impresion { display: none !important; }
         }
     </style>
 </head>
 <body>
 
-    <!-- CABECERA -->
     <header>
-        <div class="logo-caja">
-            <span class="logo-icono">🌾</span>
-            <span class="logo-titulo">Artesano</span>
-            <span class="logo-sub">del Campo</span>
-        </div>
+        <img src="8949.jpg" alt="Artesano del Campo" class="logo-img">
     </header>
 
     <main>
-        <!-- ================= EMPANADAS ================= -->
         <div class="categoria-titulo">🥟 Empanadas</div>
         <div class="grilla-productos">
-            <!-- Producto 1 -->
             <div class="tarjeta-producto">
-                <div class="foto-placeholder">📷 Sin foto aún</div>
+                <div class="contenedor-foto"><img class="foto-real" src="8946.jpg" alt="Pino"></div>
                 <div class="info-producto">
                     <div class="nombre-producto">Pino</div>
-                    <div class="precio-producto">$2.500</div>
-                    <button class="btn-agregar" onclick="agregar('Empanada Pino', 2500)">+ Agregar</button>
+                    <div>
+                        <div class="precio-producto">$2.500</div>
+                        <button class="btn-agregar" onclick="agregar('Empanada Pino', 2500)">+ Agregar</button>
+                    </div>
                 </div>
             </div>
-            <!-- Producto 2 -->
             <div class="tarjeta-producto">
-                <div class="foto-placeholder">📷 Sin foto aún</div>
+                <div class="contenedor-foto"><img class="foto-real" src="8948.jpg" alt="Pollo"></div>
                 <div class="info-producto">
                     <div class="nombre-producto">Pollo</div>
-                    <div class="precio-producto">$2.500</div>
-                    <button class="btn-agregar" onclick="agregar('Empanada Pollo', 2500)">+ Agregar</button>
+                    <div>
+                        <div class="precio-producto">$2.500</div>
+                        <button class="btn-agregar" onclick="agregar('Empanada Pollo', 2500)">+ Agregar</button>
+                    </div>
                 </div>
             </div>
-            <!-- Producto 3 -->
             <div class="tarjeta-producto">
-                <div class="foto-placeholder">📷 Sin foto aún</div>
+                <div class="contenedor-foto"><img class="foto-real" src="8945.jpg" alt="Champiñón Queso"></div>
                 <div class="info-producto">
                     <div class="nombre-producto">Champiñón Queso</div>
-                    <div class="precio-producto">$2.500</div>
-                    <button class="btn-agregar" onclick="agregar('Empanada Champ. Queso', 2500)">+ Agregar</button>
+                    <div>
+                        <div class="precio-producto">$2.500</div>
+                        <button class="btn-agregar" onclick="agregar('Empanada Champ. Queso', 2500)">+ Agregar</button>
+                    </div>
                 </div>
             </div>
-            <!-- Producto 4 -->
             <div class="tarjeta-producto">
-                <div class="foto-placeholder">📷 Sin foto aún</div>
+                <div class="contenedor-foto"><img class="foto-real" src="8947.jpg" alt="Napolitana"></div>
                 <div class="info-producto">
                     <div class="nombre-producto">Napolitana</div>
-                    <div class="precio-producto">$2.500</div>
-                    <button class="btn-agregar" onclick="agregar('Empanada Napolitana', 2500)">+ Agregar</button>
+                    <div>
+                        <div class="precio-producto">$2.500</div>
+                        <button class="btn-agregar" onclick="agregar('Empanada Napolitana', 2500)">+ Agregar</button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- ================= PANADERÍA ================= -->
         <div class="categoria-titulo">🥖 Panadería</div>
         <div class="grilla-productos">
             <div class="tarjeta-producto">
-                <div class="foto-placeholder">📷 Sin foto aún</div>
+                <div class="contenedor-foto"><img class="foto-real" src="8944.jpg" alt="Pan Amasado"></div>
                 <div class="info-producto">
                     <div class="nombre-producto">Pan Amasado</div>
-                    <div class="precio-producto">$200</div>
-                    <button class="btn-agregar" onclick="agregar('Pan Amasado', 200)">+ Agregar</button>
+                    <div>
+                        <div class="precio-producto">$200</div>
+                        <button class="btn-agregar" onclick="agregar('Pan Amasado', 200)">+ Agregar</button>
+                    </div>
                 </div>
             </div>
             <div class="tarjeta-producto">
-                <div class="foto-placeholder">📷 Sin foto aún</div>
+                <div class="contenedor-foto"><img class="foto-real" src="8943.jpg" alt="Dobladitas"></div>
                 <div class="info-producto">
                     <div class="nombre-producto">Dobladitas</div>
-                    <div class="precio-producto">$250</div>
-                    <button class="btn-agregar" onclick="agregar('Dobladita', 250)">+ Agregar</button>
+                    <div>
+                        <div class="precio-producto">$250</div>
+                        <button class="btn-agregar" onclick="agregar('Dobladita', 250)">+ Agregar</button>
+                    </div>
                 </div>
             </div>
-            <!-- Tortillas Separadas -->
             <div class="tarjeta-producto">
-                <div class="foto-placeholder">📷 Sin foto aún</div>
+                <div class="contenedor-foto"><img class="foto-real" src="8943.jpg" alt="Tortilla c/Chicharrones"></div>
                 <div class="info-producto">
                     <div class="nombre-producto">Tortilla con Chicharrones</div>
-                    <div class="precio-producto">$2.500</div>
-                    <button class="btn-agregar" onclick="agregar('Tortilla c/Chicharrones', 2500)">+ Agregar</button>
+                    <div>
+                        <div class="precio-producto">$2.500</div>
+                        <button class="btn-agregar" onclick="agregar('Tortilla c/Chicharrones', 2500)">+ Agregar</button>
+                    </div>
                 </div>
             </div>
             <div class="tarjeta-producto">
-                <div class="foto-placeholder">📷 Sin foto aún</div>
+                <div class="contenedor-foto"><img class="foto-real" src="8944.jpg" alt="Tortilla s/Chicharrones"></div>
                 <div class="info-producto">
                     <div class="nombre-producto">Tortilla sin Chicharrones</div>
-                    <div class="precio-producto">$2.500</div>
-                    <button class="btn-agregar" onclick="agregar('Tortilla s/Chicharrones', 2500)">+ Agregar</button>
+                    <div>
+                        <div class="precio-producto">$2.500</div>
+                        <button class="btn-agregar" onclick="agregar('Tortilla s/Chicharrones', 2500)">+ Agregar</button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- ================= PASTELERÍA ================= -->
         <div class="categoria-titulo">🍰 Pastelería</div>
         <div class="grilla-productos">
             <div class="tarjeta-producto">
-                <div class="foto-placeholder">📷 Sin foto aún</div>
+                <div class="contenedor-foto"><img class="foto-real" src="8941.jpg" alt="Queque"></div>
                 <div class="info-producto">
                     <div class="nombre-producto">Queque</div>
-                    <div class="precio-producto">$3.500</div>
-                    <button class="btn-agregar" onclick="agregar('Queque', 3500)">+ Agregar</button>
+                    <div>
+                        <div class="precio-producto">$3.500</div>
+                        <button class="btn-agregar" onclick="agregar('Queque', 3500)">+ Agregar</button>
+                    </div>
                 </div>
             </div>
             <div class="tarjeta-producto">
-                <div class="foto-placeholder">📷 Sin foto aún</div>
+                <div class="contenedor-foto"><img class="foto-real" src="8942.jpg" alt="Chilenitos"></div>
                 <div class="info-producto">
                     <div class="nombre-producto">Chilenitos</div>
-                    <div class="precio-producto">$700</div>
-                    <button class="btn-agregar" onclick="agregar('Chilenito', 700)">+ Agregar</button>
+                    <div>
+                        <div class="precio-producto">$700</div>
+                        <button class="btn-agregar" onclick="agregar('Chilenito', 700)">+ Agregar</button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- ================= BEBIDAS ================= -->
         <div class="categoria-titulo">🥤 Bebidas</div>
         <div class="grilla-productos">
             <div class="tarjeta-producto">
-                <div class="foto-placeholder">📷 Sin foto aún</div>
-                <div class="info-producto">
+                <div class="info-producto" style="justify-content: center; padding-top: 15px;">
                     <div class="nombre-producto">Bebida Lata 350cc</div>
-                    <div class="precio-producto">$1.200</div>
-                    <button class="btn-agregar" onclick="agregar('Bebida Lata 350cc', 1200)">+ Agregar</button>
+                    <div>
+                        <div class="precio-producto">$1.200</div>
+                        <button class="btn-agregar" onclick="agregar('Bebida Lata 350cc', 1200)">+ Agregar</button>
+                    </div>
                 </div>
             </div>
             <div class="tarjeta-producto">
-                <div class="foto-placeholder">📷 Sin foto aún</div>
-                <div class="info-producto">
+                <div class="info-producto" style="justify-content: center; padding-top: 15px;">
                     <div class="nombre-producto">Bebida Botella 500cc</div>
-                    <div class="precio-producto">$1.700</div>
-                    <button class="btn-agregar" onclick="agregar('Bebida 500cc', 1700)">+ Agregar</button>
+                    <div>
+                        <div class="precio-producto">$1.700</div>
+                        <button class="btn-agregar" onclick="agregar('Bebida 500cc', 1700)">+ Agregar</button>
+                    </div>
                 </div>
             </div>
             <div class="tarjeta-producto">
-                <div class="foto-placeholder">📷 Sin foto aún</div>
-                <div class="info-producto">
+                <div class="info-producto" style="justify-content: center; padding-top: 15px;">
                     <div class="nombre-producto">Bebida 1.5 Litros</div>
-                    <div class="precio-producto">$2.500</div>
-                    <button class="btn-agregar" onclick="agregar('Bebida 1.5L', 2500)">+ Agregar</button>
+                    <div>
+                        <div class="precio-producto">$2.500</div>
+                        <button class="btn-agregar" onclick="agregar('Bebida 1.5L', 2500)">+ Agregar</button>
+                    </div>
                 </div>
             </div>
             <div class="tarjeta-producto">
-                <div class="foto-placeholder">📷 Sin foto aún</div>
-                <div class="info-producto">
+                <div class="info-producto" style="justify-content: center; padding-top: 15px;">
                     <div class="nombre-producto">Jugo 1.5 Litros</div>
-                    <div class="precio-producto">$2.500</div>
-                    <button class="btn-agregar" onclick="agregar('Jugo 1.5L', 2500)">+ Agregar</button>
+                    <div>
+                        <div class="precio-producto">$2.500</div>
+                        <button class="btn-agregar" onclick="agregar('Jugo 1.5L', 2500)">+ Agregar</button>
+                    </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- ================= BARRA FLOTANTE ================= -->
     <div class="barra-carrito" id="barra-carrito" onclick="abrirCarrito()">
         <div>🛒 Ver Pedido (<span id="cantidad-total">0</span>)</div>
         <div id="precio-total-barra">$0</div>
     </div>
 
-    <!-- ================= MODAL CARRITO ================= -->
     <div class="modal-fondo" id="modal-carrito">
         <div class="modal-contenido">
             <div class="modal-cabecera">
@@ -290,9 +320,7 @@
                 <button class="btn-cerrar" onclick="cerrarCarrito()">✕</button>
             </div>
             
-            <div id="lista-carrito">
-                <!-- Los productos agregados aparecen aquí -->
-            </div>
+            <div id="lista-carrito"></div>
 
             <div class="opciones-entrega">
                 <button class="btn-entrega activo" id="btn-retiro" onclick="seleccionarEntrega('Retiro en local')">🏬 Retiro</button>
@@ -310,16 +338,13 @@
         </div>
     </div>
 
-    <!-- DIV OCULTO PARA IMPRIMIR EL TICKET -->
     <div id="ticket-impresion"></div>
 
-    <!-- ================= LOGICA (JAVASCRIPT) ================= -->
     <script>
         let carrito = {};
         let totalDinero = 0;
         let opcionEntrega = 'Retiro en local';
 
-        // 1. Agrega productos al carrito
         function agregar(nombre, precio) {
             if (carrito[nombre]) {
                 carrito[nombre].cantidad += 1;
@@ -329,7 +354,6 @@
             actualizarCarrito();
         }
 
-        // 2. Modifica la cantidad con botones + y -
         function modificarCantidad(nombre, delta) {
             carrito[nombre].cantidad += delta;
             if (carrito[nombre].cantidad <= 0) {
@@ -338,7 +362,11 @@
             actualizarCarrito();
         }
 
-        // 3. Actualiza textos, sumas y pantalla
+        function eliminarProducto(nombre) {
+            delete carrito[nombre];
+            actualizarCarrito();
+        }
+
         function actualizarCarrito() {
             let listaHTML = '';
             totalDinero = 0;
@@ -354,12 +382,13 @@
                 <div class="item-carrito">
                     <div>
                         <div style="font-weight:bold;">${producto}</div>
-                        <div style="font-size:0.85rem; color:var(--madera);">$${item.precio} c/u</div>
+                        <div style="font-size:0.85rem; color:#d4a373;">$${item.precio} c/u</div>
                     </div>
                     <div class="controles-cantidad">
                         <button class="btn-cant" onclick="modificarCantidad('${producto}', -1)">-</button>
                         <span>${item.cantidad}</span>
                         <button class="btn-cant" onclick="modificarCantidad('${producto}', 1)">+</button>
+                        <button class="btn-eliminar-item" onclick="eliminarProducto('${producto}')" title="Borrar producto">🗑️</button>
                     </div>
                 </div>`;
             }
@@ -369,7 +398,6 @@
             document.getElementById('precio-total-barra').innerText = '$' + totalDinero;
             document.getElementById('precio-total-modal').innerText = '$' + totalDinero;
 
-            // Mostrar/ocultar barra flotante
             if (totalItems > 0) {
                 document.getElementById('barra-carrito').style.display = 'flex';
             } else {
@@ -378,7 +406,6 @@
             }
         }
 
-        // 4. Selecciona Retiro o Delivery (Opción 2)
         function seleccionarEntrega(tipo) {
             opcionEntrega = tipo;
             document.getElementById('btn-retiro').classList.remove('activo');
@@ -393,15 +420,9 @@
             }
         }
 
-        // 5. Abrir y Cerrar (Sin congelar pantalla)
-        function abrirCarrito() {
-            document.getElementById('modal-carrito').style.display = 'flex';
-        }
-        function cerrarCarrito() {
-            document.getElementById('modal-carrito').style.display = 'none';
-        }
+        function abrirCarrito() { document.getElementById('modal-carrito').style.display = 'flex'; }
+        function cerrarCarrito() { document.getElementById('modal-carrito').style.display = 'none'; }
 
-        // 6. Enviar a WhatsApp
         function enviarWhatsApp() {
             let texto = `🌾 *NUEVO PEDIDO - ARTESANO DEL CAMPO*\n\n`;
             for (let p in carrito) {
@@ -414,13 +435,11 @@
                 texto += `_(Por favor indícame tu dirección para calcular el costo de envío)_\n`;
             }
 
-            // REEMPLAZA EL 56912345678 POR TU NÚMERO DE WHATSAPP REAL (con 569...)
-            let tuNumero = "56912345678";
+            let tuNumero = "56912345678"; // <--- CAMBIA ESTO POR TU NÚMERO REAL
             let url = `https://wa.me/${tuNumero}?text=${encodeURIComponent(texto)}`;
             window.open(url, '_blank');
         }
 
-        // 7. Imprimir Comanda (Uso interno tuyo)
         function imprimirComanda() {
             let htmlTicket = `
                 <div style="text-align:center; font-weight:bold; margin-bottom:10px; font-size:1.5em;">ARTESANO DEL CAMPO</div>
@@ -440,7 +459,6 @@
                 </div>
                 <div style="margin-top:20px; text-transform:uppercase;">TIPO: ${opcionEntrega}</div>
             `;
-            
             document.getElementById('ticket-impresion').innerHTML = htmlTicket;
             window.print();
         }
