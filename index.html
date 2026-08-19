@@ -6,40 +6,41 @@
     <title>Artesano del Campo</title>
     <style>
         :root {
-            --fondo: #121212;       
-            --madera: #A0522D;      
-            --madera-oscura: #7c3f1e;
-            --fierro: #2c2c2c;      
-            --verde: #2d5a27;       
-            --texto: #f0f0f0;       
+            --fondo: #0f0f0f;           /* Madera carbonizada oscura */
+            --tarjeta-bg: #181818;      /* Gris plomo oscuro */
+            --madera: #3a2618;          /* Tono madera rústica profunda */
+            --fierro: #222222;          /* Gris fierro forjado */
+            --verde: #2d5a27;           /* Verde campo original */
+            --texto: #e0e0e0;           /* Texto claro suave */
+            --plomo-texto: #aaaaaa;     /* Gris plomo para detalles */
             --blanco: #ffffff;
-            --rojo: #a93226;        
+            --acento-precio: #4ade80;   /* Verde suave o plomo brillante para precios */
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Verdana', sans-serif; }
         body { background-color: var(--fondo); color: var(--texto); padding-bottom: 100px; }
 
         header {
-            background-color: var(--fondo);
-            border-bottom: 3px solid var(--madera);
+            background-color: #0b0b0b;
+            border-bottom: 3px solid #2b1b12;
             padding: 15px;
             text-align: center;
             position: sticky; top: 0; z-index: 50;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.7);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.8);
         }
         .logo-img {
             width: 130px;
             height: 130px;
             object-fit: cover;
             border-radius: 50%;
-            border: 3px solid var(--madera);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.8);
+            border: 3px solid #4a3324;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.9);
         }
 
         .categoria-titulo {
             background-color: var(--fierro); color: var(--blanco);
             padding: 12px 15px; margin: 25px 0 12px 0;
-            font-size: 1.1rem; text-transform: uppercase; border-left: 6px solid var(--madera);
+            font-size: 1.1rem; text-transform: uppercase; border-left: 6px solid #5a3d28;
             letter-spacing: 1px;
         }
         
@@ -48,9 +49,9 @@
         }
 
         .tarjeta-producto {
-            background-color: #1a1a1a; border: 1px solid #333; border-radius: 12px;
+            background-color: var(--tarjeta-bg); border: 1px solid #2a2a2a; border-radius: 12px;
             overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
         }
 
         .contenedor-foto {
@@ -70,14 +71,16 @@
 
         .info-producto { padding: 12px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1; }
         .nombre-producto { font-size: 0.85rem; font-weight: bold; color: var(--texto); margin-bottom: 8px; line-height: 1.2; }
-        .precio-producto { color: #d4a373; font-weight: bold; font-size: 1.05rem; margin-bottom: 12px; }
+        
+        /* PRECIOS CAMBIADOS A TONO PLOMO/VERDE LIMPIO */
+        .precio-producto { color: var(--blanco); font-weight: bold; font-size: 1.05rem; margin-bottom: 12px; }
         
         .btn-agregar {
-            background-color: var(--madera); color: var(--blanco);
-            border: none; padding: 10px; width: 100%; border-radius: 8px;
+            background-color: #262626; color: var(--blanco);
+            border: 1px solid #404040; padding: 10px; width: 100%; border-radius: 8px;
             font-weight: bold; font-size: 0.95rem; cursor: pointer;
         }
-        .btn-agregar:active { background-color: var(--madera-oscura); transform: scale(0.98); }
+        .btn-agregar:active { background-color: #171717; transform: scale(0.98); }
 
         .barra-carrito {
             position: fixed; bottom: 0; left: 0; width: 100%;
@@ -91,32 +94,31 @@
 
         .modal-fondo {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.85); z-index: 100;
+            background-color: rgba(0,0,0,0.9); z-index: 100;
             display: none; justify-content: center; align-items: flex-end;
         }
         .modal-contenido {
-            background-color: #1e1e1e; width: 100%; max-height: 85vh;
-            border-top: 4px solid var(--madera); border-radius: 24px 24px 0 0;
+            background-color: #141414; width: 100%; max-height: 85vh;
+            border-top: 4px solid #3a2618; border-radius: 24px 24px 0 0;
             padding: 20px; overflow-y: auto; color: var(--texto);
         }
-        .modal-cabecera { display: flex; justify-content: space-between; border-bottom: 1px solid #333; padding-bottom: 12px; margin-bottom: 15px; align-items: center; }
-        .modal-cabecera h2 { color: #d4a373; font-size: 1.3rem; margin: 0; }
-        .btn-cerrar { background: none; border: none; color: var(--texto); font-size: 1.6rem; cursor: pointer; font-weight: bold; }
+        .modal-cabecera { display: flex; justify-content: space-between; border-bottom: 1px solid #262626; padding-bottom: 12px; margin-bottom: 15px; align-items: center; }
+        .modal-cabecera h2 { color: var(--blanco); font-size: 1.3rem; margin: 0; }
+        .btn-cerrar { background: none; border: none; color: var(--plomo-texto); font-size: 1.6rem; cursor: pointer; font-weight: bold; }
 
-        .item-carrito { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #2a2a2a; padding: 12px 0; }
+        .item-carrito { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222; padding: 12px 0; }
         .controles-cantidad { display: flex; align-items: center; gap: 8px; }
-        .btn-cant { background-color: #333; color: var(--texto); border: none; width: 30px; height: 30px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 1rem; }
-        .btn-eliminar-item { background-color: rgba(169, 50, 38, 0.25); color: #e74c3c; border: 1px solid #a93226; width: 30px; height: 30px; border-radius: 6px; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .btn-cant { background-color: #262626; color: var(--blanco); border: 1px solid #404040; width: 30px; height: 30px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 1rem; }
+        .btn-eliminar-item { background-color: rgba(169, 50, 38, 0.2); color: #e74c3c; border: 1px solid #a93226; width: 30px; height: 30px; border-radius: 6px; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
         .opciones-entrega { display: flex; gap: 10px; margin: 20px 0; }
-        .btn-entrega { flex: 1; padding: 12px; background-color: #2a2a2a; color: var(--texto); border: 2px solid transparent; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 0.95rem; }
-        .btn-entrega.activo { background-color: rgba(160, 82, 45, 0.25); border-color: var(--madera); color: #d4a373; }
+        .btn-entrega { flex: 1; padding: 12px; background-color: #1c1c1c; color: var(--plomo-texto); border: 2px solid #2a2a2a; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 0.95rem; }
+        .btn-entrega.activo { background-color: #222; border-color: #5a3d28; color: var(--blanco); }
 
-        .nota-delivery { font-size: 0.85rem; color: #aaa; text-align: center; margin-bottom: 15px; }
-        .total-final { display: flex; justify-content: space-between; font-size: 1.3rem; font-weight: bold; color: #a3e635; margin-bottom: 20px; border-top: 1px solid #333; padding-top: 15px; }
+        .nota-delivery { font-size: 0.85rem; color: var(--plomo-texto); text-align: center; margin-bottom: 15px; }
+        .total-final { display: flex; justify-content: space-between; font-size: 1.3rem; font-weight: bold; color: #4ade80; margin-bottom: 20px; border-top: 1px solid #262626; padding-top: 15px; }
 
         .btn-whatsapp { background-color: var(--verde); color: var(--blanco); border: none; padding: 14px; width: 100%; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-bottom: 10px; }
-        .btn-imprimir { background-color: #2a2a2a; color: var(--texto); border: none; padding: 10px; width: 100%; border-radius: 8px; font-size: 0.9rem; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -350,7 +352,7 @@
                 <div class="item-carrito">
                     <div>
                         <div style="font-weight:bold;">${producto}</div>
-                        <div style="font-size:0.85rem; color:#d4a373;">$${item.precio} c/u</div>
+                        <div style="font-size:0.85rem; color:#aaa;">$${item.precio} c/u</div>
                     </div>
                     <div class="controles-cantidad">
                         <button class="btn-cant" onclick="modificarCantidad('${producto}', -1)">-</button>
