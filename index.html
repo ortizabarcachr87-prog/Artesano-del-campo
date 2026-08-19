@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Artesano del Campo</title>
     <style>
-        /* ================= PALETA DE COLORES ================= */
         :root {
             --fondo: #121212;       
             --madera: #A0522D;      
@@ -20,7 +19,6 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Verdana', sans-serif; }
         body { background-color: var(--fondo); color: var(--texto); padding-bottom: 100px; }
 
-        /* ================= CABECERA CON LOGO REAL ================= */
         header {
             background-color: var(--fondo);
             border-bottom: 3px solid var(--madera);
@@ -38,7 +36,6 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.8);
         }
 
-        /* ================= SECCIONES Y CATÁLOGO ================= */
         .categoria-titulo {
             background-color: var(--fierro); color: var(--blanco);
             padding: 12px 15px; margin: 25px 0 12px 0;
@@ -53,19 +50,9 @@
         .tarjeta-producto {
             background-color: #1a1a1a; border: 1px solid #333; border-radius: 12px;
             overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;
-            position: relative; box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
         }
 
-        /* Etiqueta de Producto Nuevo */
-        .etiqueta-nuevo {
-            position: absolute; top: 8px; right: 8px;
-            background-color: var(--madera); color: white;
-            padding: 3px 8px; border-radius: 4px; font-size: 0.65rem;
-            font-weight: bold; text-transform: uppercase; z-index: 2;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.6);
-        }
-
-        /* Contenedor de foto para que NUNCA se deforme */
         .contenedor-foto {
             width: 100%;
             height: 140px;
@@ -78,8 +65,7 @@
         .foto-real { 
             width: 100%; 
             height: 100%; 
-            object-fit: cover; /* Mantiene la proporción perfecta sin estirarse */
-            transition: transform 0.3s ease;
+            object-fit: cover; 
         }
 
         .info-producto { padding: 12px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1; }
@@ -90,11 +76,9 @@
             background-color: var(--madera); color: var(--blanco);
             border: none; padding: 10px; width: 100%; border-radius: 8px;
             font-weight: bold; font-size: 0.95rem; cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
         .btn-agregar:active { background-color: var(--madera-oscura); transform: scale(0.98); }
 
-        /* ================= BARRA INFERIOR (VER PEDIDO) ================= */
         .barra-carrito {
             position: fixed; bottom: 0; left: 0; width: 100%;
             background-color: var(--verde); color: var(--blanco);
@@ -105,7 +89,6 @@
             border-top: 2px solid #388e3c;
         }
 
-        /* ================= MODAL DEL CARRITO ================= */
         .modal-fondo {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: rgba(0,0,0,0.85); z-index: 100;
@@ -115,7 +98,6 @@
             background-color: #1e1e1e; width: 100%; max-height: 85vh;
             border-top: 4px solid var(--madera); border-radius: 24px 24px 0 0;
             padding: 20px; overflow-y: auto; color: var(--texto);
-            box-shadow: 0 -10px 30px rgba(0,0,0,0.8);
         }
         .modal-cabecera { display: flex; justify-content: space-between; border-bottom: 1px solid #333; padding-bottom: 12px; margin-bottom: 15px; align-items: center; }
         .modal-cabecera h2 { color: #d4a373; font-size: 1.3rem; margin: 0; }
@@ -124,7 +106,6 @@
         .item-carrito { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #2a2a2a; padding: 12px 0; }
         .controles-cantidad { display: flex; align-items: center; gap: 8px; }
         .btn-cant { background-color: #333; color: var(--texto); border: none; width: 30px; height: 30px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 1rem; }
-        
         .btn-eliminar-item { background-color: rgba(169, 50, 38, 0.25); color: #e74c3c; border: 1px solid #a93226; width: 30px; height: 30px; border-radius: 6px; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
         .opciones-entrega { display: flex; gap: 10px; margin: 20px 0; }
@@ -134,18 +115,8 @@
         .nota-delivery { font-size: 0.85rem; color: #aaa; text-align: center; margin-bottom: 15px; }
         .total-final { display: flex; justify-content: space-between; font-size: 1.3rem; font-weight: bold; color: #a3e635; margin-bottom: 20px; border-top: 1px solid #333; padding-top: 15px; }
 
-        .btn-whatsapp { background-color: var(--verde); color: var(--blanco); border: none; padding: 14px; width: 100%; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-bottom: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .btn-whatsapp { background-color: var(--verde); color: var(--blanco); border: none; padding: 14px; width: 100%; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-bottom: 10px; }
         .btn-imprimir { background-color: #2a2a2a; color: var(--texto); border: none; padding: 10px; width: 100%; border-radius: 8px; font-size: 0.9rem; cursor: pointer; }
-
-        #ticket-impresion { display: none; }
-        @media print {
-            body * { visibility: hidden; }
-            #ticket-impresion, #ticket-impresion * { visibility: visible; }
-            #ticket-impresion {
-                display: block; position: absolute; left: 0; top: 0;
-                width: 100%; background: white; color: black; font-family: monospace; padding: 10px;
-            }
-        }
     </style>
 </head>
 <body>
@@ -334,11 +305,8 @@
             </div>
 
             <button class="btn-whatsapp" onclick="enviarWhatsApp()">📲 Enviar por WhatsApp</button>
-            <button class="btn-imprimir" onclick="imprimirComanda()">🖨️ Imprimir Comanda (Solo Admin)</button>
         </div>
     </div>
-
-    <div id="ticket-impresion"></div>
 
     <script>
         let carrito = {};
@@ -388,7 +356,7 @@
                         <button class="btn-cant" onclick="modificarCantidad('${producto}', -1)">-</button>
                         <span>${item.cantidad}</span>
                         <button class="btn-cant" onclick="modificarCantidad('${producto}', 1)">+</button>
-                        <button class="btn-eliminar-item" onclick="eliminarProducto('${producto}')" title="Borrar producto">🗑️</button>
+                        <button class="btn-eliminar-item" onclick="eliminarProducto('${producto}')" title="Borrar">🗑️</button>
                     </div>
                 </div>`;
             }
@@ -416,7 +384,7 @@
                 document.getElementById('nota-delivery').innerText = 'Retiras en nuestro local.';
             } else {
                 document.getElementById('btn-delivery').classList.add('activo');
-                document.getElementById('nota-delivery').innerText = 'El valor del envío se informará por WhatsApp según tu dirección.';
+                document.getElementById('nota-delivery').innerText = 'El valor del envío se informará por WhatsApp.';
             }
         }
 
@@ -432,35 +400,12 @@
             texto += `*Método:* ${opcionEntrega}\n\n`;
             
             if (opcionEntrega === 'Delivery') {
-                texto += `_(Por favor indícame tu dirección para calcular el costo de envío)_\n`;
+                texto += `_(Indícanos tu dirección para calcular el envío)_\n`;
             }
 
-            let tuNumero = "56912345678"; // <--- CAMBIA ESTO POR TU NÚMERO REAL
+            let tuNumero = "56912345678"; // <--- CAMBIA ESTO POR TU NÚMERO DE WHATSAPP REAL
             let url = `https://wa.me/${tuNumero}?text=${encodeURIComponent(texto)}`;
             window.open(url, '_blank');
-        }
-
-        function imprimirComanda() {
-            let htmlTicket = `
-                <div style="text-align:center; font-weight:bold; margin-bottom:10px; font-size:1.5em;">ARTESANO DEL CAMPO</div>
-                <div style="text-align:center; margin-bottom:20px;">TICKET DE PEDIDO</div>
-                <hr>
-            `;
-            for (let p in carrito) {
-                htmlTicket += `<div style="display:flex; justify-content:space-between; margin-bottom:5px;">
-                    <span>${carrito[p].cantidad}x ${p}</span>
-                    <span>$${carrito[p].precio * carrito[p].cantidad}</span>
-                </div>`;
-            }
-            htmlTicket += `<hr>
-                <div style="display:flex; justify-content:space-between; font-weight:bold; font-size:1.2em; margin-top:10px;">
-                    <span>TOTAL:</span>
-                    <span>$${totalDinero}</span>
-                </div>
-                <div style="margin-top:20px; text-transform:uppercase;">TIPO: ${opcionEntrega}</div>
-            `;
-            document.getElementById('ticket-impresion').innerHTML = htmlTicket;
-            window.print();
         }
     </script>
 </body>
