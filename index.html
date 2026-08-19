@@ -94,6 +94,7 @@
             padding: 3px 6px;
             border-radius: 4px;
             border: 1px solid rgba(255,255,255,0.2);
+            z-index: 2;
         }
 
         .info-producto { padding: 10px; text-align: left; display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1; }
@@ -155,11 +156,11 @@
         <img src="logo.jpg" alt="Artesano del Campo" class="logo-img">
         <div class="header-info">
             <h1>Artesano del Campo</h1>
-            <p>Empanadas, panadería y pastelería con estilo rústico y casero.</p>
+            <p>Empanadas, panadería y pastelería con estilo rústico, pro y totalmente adaptado a celular.</p>
         </div>
         <div class="badges-container">
-            <span class="badge">Fotos Propias</span>
-            <span class="badge">Pedido Directo</span>
+            <span class="badge">Diseño móvil</span>
+            <span class="badge">Carrito mejorado</span>
         </div>
     </header>
 
@@ -194,12 +195,12 @@
                 </div>
                 <div class="info-producto">
                     <div>
-                        <div class="nombre-producto">Pollo Choclo</div>
-                        <div class="desc-producto">Pollo jugoso con choclo tierno.</div>
+                        <div class="nombre-producto">Pollo</div>
+                        <div class="desc-producto">Empanada de pollo estilo casero.</div>
                     </div>
                     <div>
                         <div class="precio-producto">$2.500</div>
-                        <button class="btn-agregar" onclick="agregar('Empanada Pollo Choclo', 2500)">+ Agregar</button>
+                        <button class="btn-agregar" onclick="agregar('Empanada Pollo', 2500)">+ Agregar</button>
                     </div>
                 </div>
             </div>
@@ -229,7 +230,7 @@
                 <div class="info-producto">
                     <div>
                         <div class="nombre-producto">Napolitana</div>
-                        <div class="desc-producto">Queso, jamón, tomate, aceitunas y orégano.</div>
+                        <div class="desc-producto">Queso, jamón, tomate, aceitunas negras y orégano.</div>
                     </div>
                     <div>
                         <div class="precio-producto">$2.500</div>
@@ -350,6 +351,81 @@
                     <div>
                         <div class="precio-producto">$700</div>
                         <button class="btn-agregar" onclick="agregar('Chilenito', 700)">+ Agregar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= BEBIDAS ================= -->
+        <div class="categoria-titulo">
+            <span>🥤 Bebidas</span>
+            <span class="categoria-sub">Acompañamientos</span>
+        </div>
+        <div class="grilla-productos">
+            <div class="tarjeta-producto">
+                <div class="contenedor-foto">
+                    <span class="etiqueta-tag">Frío</span>
+                    <img class="foto-real" src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=500&auto=format&fit=crop&q=60" alt="Bebida Lata">
+                </div>
+                <div class="info-producto">
+                    <div>
+                        <div class="nombre-producto">Bebida Lata 350cc</div>
+                        <div class="desc-producto">Formato individual.</div>
+                    </div>
+                    <div>
+                        <div class="precio-producto">$1.200</div>
+                        <button class="btn-agregar" onclick="agregar('Bebida Lata 350cc', 1200)">+ Agregar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tarjeta-producto">
+                <div class="contenedor-foto">
+                    <span class="etiqueta-tag">Refrescante</span>
+                    <img class="foto-real" src="https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=500&auto=format&fit=crop&q=60" alt="Bebida Botella">
+                </div>
+                <div class="info-producto">
+                    <div>
+                        <div class="nombre-producto">Bebida Botella 500cc</div>
+                        <div class="desc-producto">Ideal para una porción.</div>
+                    </div>
+                    <div>
+                        <div class="precio-producto">$1.700</div>
+                        <button class="btn-agregar" onclick="agregar('Bebida Botella 500cc', 1700)">+ Agregar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tarjeta-producto">
+                <div class="contenedor-foto">
+                    <span class="etiqueta-tag" style="background:#b91c1c;">Familiar</span>
+                    <img class="foto-real" src="https://images.unsplash.com/photo-1629203851122-3726ecdf080e?w=500&auto=format&fit=crop&q=60" alt="Bebida 1.5L">
+                </div>
+                <div class="info-producto">
+                    <div>
+                        <div class="nombre-producto">Bebida 1.5 Litros</div>
+                        <div class="desc-producto">Para compartir.</div>
+                    </div>
+                    <div>
+                        <div class="precio-producto">$2.500</div>
+                        <button class="btn-agregar" onclick="agregar('Bebida 1.5L', 2500)">+ Agregar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tarjeta-producto">
+                <div class="contenedor-foto">
+                    <span class="etiqueta-tag" style="background:#b45309;">Natural</span>
+                    <img class="foto-real" src="https://images.unsplash.com/photo-1613478223719-2ab802602423?w=500&auto=format&fit=crop&q=60" alt="Jugo Natural">
+                </div>
+                <div class="info-producto">
+                    <div>
+                        <div class="nombre-producto">Jugo 1.5 Litros</div>
+                        <div class="desc-producto">Opción frutal para compartir.</div>
+                    </div>
+                    <div>
+                        <div class="precio-producto">$2.500</div>
+                        <button class="btn-agregar" onclick="agregar('Jugo 1.5L', 2500)">+ Agregar</button>
                     </div>
                 </div>
             </div>
@@ -493,7 +569,7 @@
                 texto += `*Retiro en local* Gracias.\n`;
             }
 
-            let tuNumero = "56912345678"; // <--- CAMBIA ESTO POR TU NÚMERO DE WHATSAPP REAL
+            let tuNumero = "56956139055"; // <--- CAMBIA ESTO POR TU NÚMERO DE WHATSAPP REAL
             let url = `https://wa.me/${tuNumero}?text=${encodeURIComponent(texto)}`;
             window.open(url, '_blank');
         }
