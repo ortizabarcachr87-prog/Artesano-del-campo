@@ -156,11 +156,11 @@
         <img src="logo.jpg" alt="Artesano del Campo" class="logo-img">
         <div class="header-info">
             <h1>Artesano del Campo</h1>
-            <p>Empanadas, panadería y pastelería con estilo rústico, pro y totalmente adaptado a celular.</p>
+            <p>Empanadas, panadería y pastelería con estilo rústico y casero.</p>
         </div>
         <div class="badges-container">
-            <span class="badge">Diseño móvil</span>
-            <span class="badge">Carrito mejorado</span>
+            <span class="badge">Pedidos al WhatsApp</span>
+            <span class="badge">Hecho en casa</span>
         </div>
     </header>
 
@@ -191,16 +191,16 @@
             <div class="tarjeta-producto">
                 <div class="contenedor-foto">
                     <span class="etiqueta-tag">Casera</span>
-                    <img class="foto-real" src="pollo_choclo.jpg" alt="Pollo">
+                    <img class="foto-real" src="pollo_choclo.jpg" alt="Pollo Choclo">
                 </div>
                 <div class="info-producto">
                     <div>
-                        <div class="nombre-producto">Pollo</div>
-                        <div class="desc-producto">Empanada de pollo estilo casero.</div>
+                        <div class="nombre-producto">Pollo Choclo</div>
+                        <div class="desc-producto">Pollo jugoso con choclo tierno.</div>
                     </div>
                     <div>
                         <div class="precio-producto">$2.500</div>
-                        <button class="btn-agregar" onclick="agregar('Empanada Pollo', 2500)">+ Agregar</button>
+                        <button class="btn-agregar" onclick="agregar('Empanada Pollo Choclo', 2500)">+ Agregar</button>
                     </div>
                 </div>
             </div>
@@ -230,7 +230,7 @@
                 <div class="info-producto">
                     <div>
                         <div class="nombre-producto">Napolitana</div>
-                        <div class="desc-producto">Queso, jamón, tomate, aceitunas negras y orégano.</div>
+                        <div class="desc-producto">Queso, jamón, tomate, aceitunas y orégano.</div>
                     </div>
                     <div>
                         <div class="precio-producto">$2.500</div>
@@ -283,7 +283,7 @@
             <div class="tarjeta-producto">
                 <div class="contenedor-foto">
                     <span class="etiqueta-tag">Rústica</span>
-                    <img class="foto-real" src="tortilla_con_chicharrones.jpg" alt="Tortilla c/Chicharrones">
+                    <img class="foto-real" src="tortilla_con_chicharrones.jpg" alt="Tortilla con Chicharrones">
                 </div>
                 <div class="info-producto">
                     <div>
@@ -300,7 +300,7 @@
             <div class="tarjeta-producto">
                 <div class="contenedor-foto">
                     <span class="etiqueta-tag">Clásica</span>
-                    <img class="foto-real" src="tortilla_sin_chicharrones.jpg" alt="Tortilla s/Chicharrones">
+                    <img class="foto-real" src="tortilla_sin_chicharrones.jpg" alt="Tortilla sin Chicharrones">
                 </div>
                 <div class="info-producto">
                     <div>
@@ -404,7 +404,7 @@
                 <div class="info-producto">
                     <div>
                         <div class="nombre-producto">Bebida 1.5 Litros</div>
-                        <div class="desc-producto">Para compartir.</div>
+                        <div class="desc-producto">Para compartir en familia.</div>
                     </div>
                     <div>
                         <div class="precio-producto">$2.500</div>
@@ -462,7 +462,7 @@
             </div>
 
             <button class="btn-whatsapp" onclick="enviarWhatsApp()">📲 Enviar por WhatsApp</button>
-            <p class="whatsapp-nota">Recuerda cambiar tu número de WhatsApp en el código si deseas otro destino.</p>
+            <p class="whatsapp-nota">Tus pedidos llegarán directo a nuestro número configurado.</p>
         </div>
     </div>
 
@@ -566,10 +566,10 @@
                 let direccion = document.getElementById('input-direccion').value;
                 texto += `*Dirección:* ${direccion ? direccion : 'No especificada'}\n`;
             } else {
-                texto += `*Retiro en local* Gracias.\n`;
+                texto += `*Retiro en local* (Gracias).\n`;
             }
 
-            let tuNumero = "56956139055"; // <--- CAMBIA ESTO POR TU NÚMERO DE WHATSAPP REAL
+            let tuNumero = "56956139055"; // Número de WhatsApp configurado
             let url = `https://wa.me/${tuNumero}?text=${encodeURIComponent(texto)}`;
             window.open(url, '_blank');
         }
