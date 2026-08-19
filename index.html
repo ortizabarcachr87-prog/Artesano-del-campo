@@ -1,1165 +1,578 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="dark">
+<html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Artesano del Campo</title>
-  <meta name="theme-color" content="#1b211d" />
-  <meta name="description" content="PWA móvil de Artesano del Campo con imágenes reales de productos, carrito flotante y pedido por WhatsApp." />
-  <link rel="manifest" href='data:application/manifest+json,{"name":"Artesano del Campo","short_name":"Artesano","start_url":"./","display":"standalone","background_color":"#101311","theme_color":"#1b211d","icons":[{"src":"8948.jpg","sizes":"192x192","type":"image/jpeg"},{"src":"8948.jpg","sizes":"512x512","type":"image/jpeg"}]}' />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <style>
-    :root,
-    [data-theme="dark"] {
-      --font-body: "Outfit", system-ui, sans-serif;
-      --text-xs: clamp(0.75rem, 0.72rem + 0.2vw, 0.875rem);
-      --text-sm: clamp(0.875rem, 0.84rem + 0.24vw, 1rem);
-      --text-base: clamp(1rem, 0.96rem + 0.2vw, 1.06rem);
-      --text-lg: clamp(1.125rem, 1rem + 0.5vw, 1.35rem);
-      --text-xl: clamp(1.45rem, 1.2rem + 0.9vw, 2rem);
-
-      --space-1: 0.25rem;
-      --space-2: 0.5rem;
-      --space-3: 0.75rem;
-      --space-4: 1rem;
-      --space-5: 1.25rem;
-      --space-6: 1.5rem;
-      --space-8: 2rem;
-
-      --bg: #101311;
-      --surface: #171c18;
-      --surface-2: #1e2521;
-      --surface-3: #252d28;
-      --border: rgba(209, 218, 212, 0.12);
-      --divider: rgba(209, 218, 212, 0.08);
-      --text: #ecf1ed;
-      --muted: #aeb8b1;
-      --faint: #77817a;
-      --primary: #355a44;
-      --primary-hover: #437358;
-      --primary-soft: rgba(53, 90, 68, 0.2);
-      --wood: #4a352a;
-      --wood-soft: rgba(74, 53, 42, 0.28);
-      --steel: #67706b;
-      --steel-soft: rgba(103, 112, 107, 0.22);
-      --success: #1f9b53;
-      --success-hover: #29b562;
-
-      --radius-sm: 0.75rem;
-      --radius-md: 1rem;
-      --radius-lg: 1.25rem;
-      --radius-xl: 1.75rem;
-      --radius-full: 9999px;
-
-      --shadow-sm: 0 8px 18px rgba(0, 0, 0, 0.16);
-      --shadow-md: 0 14px 30px rgba(0, 0, 0, 0.22);
-      --shadow-lg: 0 24px 54px rgba(0, 0, 0, 0.34);
-
-      --transition: 180ms cubic-bezier(0.16, 1, 0.3, 1);
-      --safe-top: env(safe-area-inset-top, 0px);
-      --safe-bottom: env(safe-area-inset-bottom, 0px);
-      --cart-height: 286px;
-    }
-
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      -webkit-text-size-adjust: none;
-      text-size-adjust: none;
-      scroll-behavior: smooth;
-    }
-
-    body {
-      min-height: 100dvh;
-      font-family: var(--font-body);
-      font-size: var(--text-base);
-      line-height: 1.5;
-      color: var(--text);
-      background:
-        radial-gradient(circle at top right, rgba(53, 90, 68, 0.16), transparent 28%),
-        radial-gradient(circle at top left, rgba(74, 53, 42, 0.14), transparent 24%),
-        linear-gradient(180deg, #101311 0%, #131815 100%);
-    }
-
-    img,
-    svg {
-      display: block;
-      max-width: 100%;
-      height: auto;
-    }
-
-    button,
-    textarea {
-      font: inherit;
-      color: inherit;
-    }
-
-    button {
-      border: none;
-      background: none;
-      cursor: pointer;
-    }
-
-    button,
-    textarea {
-      transition:
-        transform var(--transition),
-        background var(--transition),
-        border-color var(--transition),
-        box-shadow var(--transition),
-        color var(--transition);
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    :focus-visible {
-      outline: 2px solid #6ea685;
-      outline-offset: 3px;
-      border-radius: var(--radius-sm);
-    }
-
-    .app {
-      max-width: 580px;
-      margin: 0 auto;
-      min-height: 100dvh;
-      padding-bottom: calc(var(--cart-height) + 28px + var(--safe-bottom));
-    }
-
-    .header {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      padding: calc(var(--space-4) + var(--safe-top)) var(--space-4) var(--space-4);
-      backdrop-filter: blur(14px);
-      background: linear-gradient(180deg, rgba(16, 19, 17, 0.96), rgba(16, 19, 17, 0.76));
-      border-bottom: 1px solid var(--divider);
-    }
-
-    .header-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: var(--space-3);
-      margin-bottom: var(--space-4);
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: var(--space-3);
-      min-width: 0;
-    }
-
-    .logo {
-      width: 54px;
-      height: 54px;
-      border-radius: 18px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-md);
-      flex-shrink: 0;
-      background: var(--surface-3);
-    }
-
-    .logo img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .brand-copy h1 {
-      font-size: var(--text-lg);
-      line-height: 1.02;
-      letter-spacing: -0.03em;
-      margin-bottom: 4px;
-    }
-
-    .brand-copy p {
-      color: var(--muted);
-      font-size: var(--text-sm);
-    }
-
-    .cart-chip {
-      min-width: 48px;
-      min-height: 48px;
-      border-radius: var(--radius-full);
-      padding: 0 14px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      background: rgba(24, 29, 26, 0.96);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-sm);
-      font-weight: 800;
-      font-size: var(--text-sm);
-      flex-shrink: 0;
-    }
-
-    .hero {
-      position: relative;
-      overflow: hidden;
-      border-radius: var(--radius-xl);
-      min-height: 220px;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-md);
-      background: #111;
-    }
-
-    .hero img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: brightness(0.5);
-    }
-
-    .hero::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(180deg, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.72)),
-        linear-gradient(135deg, rgba(53, 90, 68, 0.22), rgba(74, 53, 42, 0.2));
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      padding: var(--space-5);
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      min-height: 220px;
-    }
-
-    .hero h2 {
-      font-size: var(--text-xl);
-      line-height: 1.02;
-      letter-spacing: -0.04em;
-      margin-bottom: var(--space-2);
-      max-width: 14ch;
-    }
-
-    .hero p {
-      color: #d7dfd9;
-      font-size: var(--text-sm);
-      margin-bottom: var(--space-4);
-      max-width: 34ch;
-    }
-
-    .hero-pills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .hero-pill {
-      padding: 10px 12px;
-      border-radius: var(--radius-full);
-      font-size: var(--text-xs);
-      font-weight: 800;
-      border: 1px solid rgba(224, 232, 227, 0.12);
-      background: rgba(16, 19, 17, 0.5);
-      color: #eff4f0;
-      backdrop-filter: blur(8px);
-    }
-
-    main {
-      padding: var(--space-4);
-    }
-
-    .tabs-wrap {
-      position: sticky;
-      top: calc(126px + var(--safe-top));
-      z-index: 16;
-      margin-bottom: var(--space-4);
-      padding-bottom: var(--space-2);
-      background: linear-gradient(180deg, rgba(16, 19, 17, 0.96), rgba(16, 19, 17, 0));
-    }
-
-    .tabs {
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-
-    .tabs::-webkit-scrollbar {
-      display: none;
-    }
-
-    .tab-btn {
-      min-height: 44px;
-      white-space: nowrap;
-      padding: 0 16px;
-      border-radius: var(--radius-full);
-      background: rgba(23, 28, 24, 0.96);
-      border: 1px solid var(--border);
-      color: var(--muted);
-      font-size: var(--text-sm);
-      font-weight: 800;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .tab-btn.active {
-      background: linear-gradient(135deg, var(--primary), var(--primary-hover));
-      color: #f3f7f4;
-      border-color: transparent;
-    }
-
-    .section {
-      margin-bottom: var(--space-8);
-      scroll-margin-top: 188px;
-    }
-
-    .section-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: var(--space-3);
-      margin-bottom: var(--space-3);
-    }
-
-    .section-head h3 {
-      font-size: var(--text-lg);
-      letter-spacing: -0.02em;
-    }
-
-    .section-head span {
-      color: var(--muted);
-      font-size: var(--text-sm);
-    }
-
-    .product-list {
-      display: grid;
-      gap: var(--space-3);
-    }
-
-    .product-card {
-      display: grid;
-      grid-template-columns: 106px 1fr;
-      gap: var(--space-3);
-      padding: var(--space-3);
-      border-radius: var(--radius-lg);
-      background: linear-gradient(135deg, rgba(23, 28, 24, 0.98), rgba(30, 37, 33, 0.95));
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-sm);
-      min-width: 0;
-    }
-
-    .product-media {
-      width: 106px;
-      aspect-ratio: 1/1;
-      border-radius: calc(var(--radius-lg) - var(--space-3));
-      overflow: hidden;
-      background: var(--surface-3);
-      position: relative;
-    }
-
-    .product-media img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .product-tag {
-      position: absolute;
-      left: 8px;
-      bottom: 8px;
-      padding: 6px 8px;
-      border-radius: var(--radius-full);
-      font-size: 11px;
-      font-weight: 800;
-      color: #f2f5f3;
-      background: rgba(16, 19, 17, 0.84);
-      backdrop-filter: blur(8px);
-    }
-
-    .product-info {
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-    }
-
-    .product-top {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: var(--space-2);
-      margin-bottom: var(--space-2);
-    }
-
-    .product-name {
-      font-size: 1rem;
-      font-weight: 800;
-      line-height: 1.1;
-      letter-spacing: -0.02em;
-    }
-
-    .product-price {
-      flex-shrink: 0;
-      padding: 8px 10px;
-      border-radius: var(--radius-full);
-      background: rgba(53, 90, 68, 0.2);
-      color: #d1e6d8;
-      font-size: var(--text-sm);
-      font-weight: 800;
-    }
-
-    .product-desc {
-      color: var(--muted);
-      font-size: var(--text-sm);
-      margin-bottom: auto;
-      padding-bottom: var(--space-3);
-    }
-
-    .product-actions {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: var(--space-3);
-      margin-top: auto;
-    }
-
-    .qty {
-      min-height: 46px;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px;
-      border-radius: var(--radius-full);
-      background: rgba(37, 45, 40, 0.96);
-      border: 1px solid var(--border);
-    }
-
-    .qty-btn,
-    .mini-btn {
-      width: 34px;
-      height: 34px;
-      border-radius: 999px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: #202622;
-      border: 1px solid var(--border);
-      font-size: 1rem;
-      font-weight: 800;
-      color: var(--text);
-      flex-shrink: 0;
-    }
-
-    .mini-btn {
-      width: 28px;
-      height: 28px;
-      font-size: 0.95rem;
-    }
-
-    .qty-value {
-      min-width: 22px;
-      text-align: center;
-      font-size: var(--text-sm);
-      font-weight: 800;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .add-btn {
-      min-height: 46px;
-      padding: 0 16px;
-      border-radius: var(--radius-full);
-      background: linear-gradient(135deg, var(--primary), var(--primary-hover));
-      color: #edf3ef;
-      font-size: var(--text-sm);
-      font-weight: 800;
-      white-space: nowrap;
-      box-shadow: 0 10px 18px rgba(53, 90, 68, 0.24);
-    }
-
-    .cart-chip:active,
-    .tab-btn:active,
-    .qty-btn:active,
-    .mini-btn:active,
-    .add-btn:active,
-    .delivery-btn:active,
-    .checkout-btn:active {
-      transform: scale(0.97);
-    }
-
-    .cart-panel {
-      position: fixed;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: calc(12px + var(--safe-bottom));
-      width: min(548px, calc(100vw - 18px));
-      z-index: 30;
-      height: var(--cart-height);
-      background: linear-gradient(180deg, rgba(24, 28, 26, 0.99), rgba(16, 19, 17, 0.99));
-      border: 1px solid rgba(209, 218, 212, 0.12);
-      border-radius: 28px;
-      box-shadow: var(--shadow-lg);
-      display: grid;
-      grid-template-rows: auto minmax(0, 1fr) auto auto;
-      overflow: hidden;
-      pointer-events: auto;
-    }
-
-    .cart-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: var(--space-2);
-      padding: var(--space-4) var(--space-4) var(--space-3);
-      border-bottom: 1px solid var(--divider);
-    }
-
-    .cart-head h4 {
-      font-size: 1rem;
-      letter-spacing: -0.02em;
-    }
-
-    .cart-count {
-      padding: 7px 10px;
-      border-radius: var(--radius-full);
-      background: rgba(53, 90, 68, 0.2);
-      color: #d1e4d8;
-      font-size: var(--text-xs);
-      font-weight: 800;
-      white-space: nowrap;
-    }
-
-    .cart-items {
-      min-height: 0;
-      overflow-y: auto;
-      overflow-x: hidden;
-      padding: 0 var(--space-4);
-      overscroll-behavior: contain;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .empty-cart {
-      padding: var(--space-3) 0;
-      color: var(--muted);
-      font-size: var(--text-sm);
-    }
-
-    .cart-item {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: var(--space-2);
-      padding: 12px 0;
-      border-top: 1px solid var(--divider);
-    }
-
-    .cart-item:first-child {
-      border-top: none;
-    }
-
-    .cart-item-name {
-      font-size: var(--text-sm);
-      font-weight: 800;
-      margin-bottom: 4px;
-    }
-
-    .cart-item-meta {
-      font-size: var(--text-xs);
-      color: var(--muted);
-    }
-
-    .cart-item-controls {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 8px;
-    }
-
-    .cart-item-total {
-      align-self: start;
-      font-size: var(--text-sm);
-      font-weight: 800;
-      font-variant-numeric: tabular-nums;
-      white-space: nowrap;
-    }
-
-    .delivery-wrap {
-      padding: var(--space-3) var(--space-4) 0;
-      border-top: 1px solid var(--divider);
-      background: rgba(18, 22, 20, 0.96);
-    }
-
-    .control-title {
-      margin-bottom: 10px;
-      font-size: var(--text-xs);
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-
-    .delivery-options {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    .delivery-btn {
-      min-height: 64px;
-      padding: 12px;
-      border-radius: var(--radius-md);
-      text-align: left;
-      background: #202622;
-      border: 1px solid var(--border);
-    }
-
-    .delivery-btn.active {
-      background: linear-gradient(135deg, rgba(53, 90, 68, 0.22), rgba(103, 112, 107, 0.16));
-      border-color: rgba(110, 164, 130, 0.34);
-      box-shadow: inset 0 0 0 1px rgba(110, 164, 130, 0.14);
-    }
-
-    .delivery-btn strong {
-      display: block;
-      font-size: var(--text-sm);
-      margin-bottom: 4px;
-    }
-
-    .delivery-btn span {
-      display: block;
-      font-size: var(--text-xs);
-      color: var(--muted);
-      line-height: 1.3;
-    }
-
-    .address-wrap {
-      display: none;
-      padding: var(--space-3) var(--space-4) 0;
-      background: rgba(18, 22, 20, 0.96);
-    }
-
-    .address-wrap.visible {
-      display: block;
-    }
-
-    .field {
-      display: grid;
-      gap: 8px;
-    }
-
-    .field label {
-      font-size: var(--text-sm);
-      font-weight: 700;
-      color: var(--muted);
-    }
-
-    .field textarea {
-      width: 100%;
-      min-height: 76px;
-      padding: 14px;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border);
-      background: #202622;
-      color: var(--text);
-      resize: vertical;
-      outline: none;
-    }
-
-    .field textarea::placeholder {
-      color: var(--faint);
-    }
-
-    .field textarea:focus {
-      border-color: rgba(110, 164, 130, 0.4);
-      box-shadow: 0 0 0 4px rgba(54, 99, 75, 0.16);
-    }
-
-    .cart-footer {
-      padding: var(--space-3) var(--space-4) var(--space-4);
-      border-top: 1px solid var(--divider);
-      background: linear-gradient(180deg, rgba(22, 26, 24, 0.96), rgba(16, 19, 17, 1));
-    }
-
-    .totals {
-      display: grid;
-      gap: 8px;
-      margin-bottom: var(--space-3);
-    }
-
-    .total-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: var(--space-2);
-      font-size: var(--text-sm);
-    }
-
-    .total-row strong {
-      font-variant-numeric: tabular-nums;
-    }
-
-    .checkout-btn {
-      width: 100%;
-      min-height: 56px;
-      border-radius: 20px;
-      background: linear-gradient(135deg, var(--success), var(--success-hover));
-      color: white;
-      font-size: var(--text-sm);
-      font-weight: 800;
-      box-shadow: 0 14px 28px rgba(31, 155, 83, 0.22);
-    }
-
-    .checkout-btn:disabled {
-      opacity: 0.55;
-      box-shadow: none;
-    }
-
-    .helper {
-      margin-top: 10px;
-      text-align: center;
-      color: var(--muted);
-      font-size: 11px;
-      line-height: 1.35;
-    }
-
-    @media (max-width: 430px) {
-      :root,
-      [data-theme="dark"] {
-        --cart-height: 308px;
-      }
-
-      .product-card {
-        grid-template-columns: 96px 1fr;
-      }
-
-      .product-media {
-        width: 96px;
-      }
-
-      .product-actions {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .add-btn {
-        width: 100%;
-      }
-    }
-
-    @media (max-width: 370px) {
-      :root,
-      [data-theme="dark"] {
-        --cart-height: 350px;
-      }
-
-      .delivery-options {
-        grid-template-columns: 1fr;
-      }
-
-      .hero h2 {
-        max-width: 100%;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *,
-      *::before,
-      *::after {
-        transition-duration: 0.01ms !important;
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        scroll-behavior: auto !important;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artesano del Campo</title>
+    <style>
+        :root {
+            --fondo: #0f0f0f;
+            --tarjeta-bg: #181818;
+            --madera: #3a2618;
+            --fierro: #222222;
+            --verde: #2d5a27;
+            --texto: #e0e0e0;
+            --plomo-texto: #aaaaaa;
+            --blanco: #ffffff;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Verdana', sans-serif; }
+        body { background-color: var(--fondo); color: var(--texto); padding-bottom: 100px; }
+
+        header {
+            background-color: #0b0b0b;
+            border-bottom: 3px solid var(--madera);
+            padding: 15px;
+            text-align: center;
+            position: sticky; top: 0; z-index: 50;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.8);
+        }
+        .logo-img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid #5a3d28;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.9);
+            margin-bottom: 10px;
+        }
+        .header-info h1 { font-size: 1.4rem; color: var(--blanco); margin-bottom: 5px; }
+        .header-info p { font-size: 0.85rem; color: var(--plomo-texto); line-height: 1.3; }
+        
+        .badges-container {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        .badge {
+            background-color: #222;
+            color: var(--plomo-texto);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            border: 1px solid #333;
+        }
+
+        .categoria-titulo {
+            background-color: var(--fierro); color: var(--blanco);
+            padding: 12px 15px; margin: 25px 0 12px 0;
+            font-size: 1rem; text-transform: uppercase; border-left: 6px solid #5a3d28;
+            letter-spacing: 1px; display: flex; justify-content: space-between; align-items: center;
+        }
+        .categoria-sub { font-size: 0.75rem; color: var(--plomo-texto); font-weight: normal; text-transform: none; }
+        
+        .grilla-productos {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 12px;
+        }
+
+        .tarjeta-producto {
+            background-color: var(--tarjeta-bg); border: 1px solid #2a2a2a; border-radius: 12px;
+            overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+        }
+
+        .contenedor-foto {
+            width: 100%;
+            height: 130px;
+            background-color: #000;
+            position: relative;
+        }
+        .foto-real { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+        }
+        .etiqueta-tag {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: rgba(0, 0, 0, 0.75);
+            color: var(--blanco);
+            font-size: 0.65rem;
+            padding: 3px 6px;
+            border-radius: 4px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .info-producto { padding: 10px; text-align: left; display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1; }
+        .nombre-producto { font-size: 0.85rem; font-weight: bold; color: var(--blanco); margin-bottom: 2px; }
+        .desc-producto { font-size: 0.72rem; color: var(--plomo-texto); margin-bottom: 8px; line-height: 1.2; }
+        .precio-producto { color: var(--blanco); font-weight: bold; font-size: 1rem; margin-bottom: 8px; }
+        
+        .btn-agregar {
+            background-color: var(--verde); color: var(--blanco);
+            border: none; padding: 8px; width: 100%; border-radius: 6px;
+            font-weight: bold; font-size: 0.85rem; cursor: pointer;
+        }
+        .btn-agregar:active { opacity: 0.8; transform: scale(0.98); }
+
+        .barra-carrito {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background-color: var(--verde); color: var(--blanco);
+            padding: 16px 20px; display: flex; justify-content: space-between;
+            align-items: center; font-size: 1.1rem; font-weight: bold;
+            cursor: pointer; z-index: 90; display: none;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.6);
+            border-top: 2px solid #388e3c;
+        }
+
+        .modal-fondo {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.9); z-index: 100;
+            display: none; justify-content: center; align-items: flex-end;
+        }
+        .modal-contenido {
+            background-color: #141414; width: 100%; max-height: 85vh;
+            border-top: 4px solid #3a2618; border-radius: 24px 24px 0 0;
+            padding: 20px; overflow-y: auto; color: var(--texto);
+        }
+        .modal-cabecera { display: flex; justify-content: space-between; border-bottom: 1px solid #262626; padding-bottom: 12px; margin-bottom: 15px; align-items: center; }
+        .modal-cabecera h2 { color: var(--blanco); font-size: 1.3rem; margin: 0; }
+        .btn-cerrar { background: none; border: none; color: var(--plomo-texto); font-size: 1.6rem; cursor: pointer; font-weight: bold; }
+
+        .item-carrito { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222; padding: 10px 0; font-size: 0.9rem; }
+        .controles-cantidad { display: flex; align-items: center; gap: 6px; }
+        .btn-cant { background-color: #262626; color: var(--blanco); border: 1px solid #404040; width: 28px; height: 28px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .btn-eliminar-item { background-color: rgba(169, 50, 38, 0.2); color: #e74c3c; border: 1px solid #a93226; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+        .opciones-entrega { display: flex; gap: 10px; margin: 15px 0 10px 0; }
+        .btn-entrega { flex: 1; padding: 10px; background-color: #1c1c1c; color: var(--plomo-texto); border: 2px solid #2a2a2a; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 0.9rem; }
+        .btn-entrega.activo { background-color: #222; border-color: #5a3d28; color: var(--blanco); }
+
+        .campo-direccion { width: 100%; padding: 10px; background: #1c1c1c; border: 1px solid #333; color: white; border-radius: 8px; margin-bottom: 15px; font-size: 0.9rem; display: none; }
+        .nota-delivery { font-size: 0.8rem; color: var(--plomo-texto); text-align: center; margin-bottom: 15px; }
+        .total-final { display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: bold; color: #4ade80; margin-bottom: 15px; border-top: 1px solid #262626; padding-top: 15px; }
+
+        .btn-whatsapp { background-color: var(--verde); color: var(--blanco); border: none; padding: 14px; width: 100%; border-radius: 10px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-bottom: 5px; }
+        .whatsapp-nota { font-size: 0.7rem; color: #777; text-align: center; margin-top: 5px; }
+    </style>
 </head>
 <body>
-  <div class="app">
-    <header class="header">
-      <div class="header-top">
-        <div class="brand">
-          <div class="logo">
-            <img src="8948.jpg" alt="Logo Artesano del Campo" width="300" height="300" />
-          </div>
-          <div class="brand-copy">
+
+    <header>
+        <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=300" alt="Artesano del Campo" class="logo-img">
+        <div class="header-info">
             <h1>Artesano del Campo</h1>
-            <p>Sabor casero, imagen real del negocio</p>
-          </div>
+            <p>Empanadas, panadería y pastelería con estilo rústico, pro y totalmente adaptado a celular.</p>
         </div>
-
-        <button class="cart-chip" type="button" aria-label="Cantidad total en el carrito">
-          <span>🛒</span>
-          <span id="headerCartCount">0</span>
-        </button>
-      </div>
-
-      <div class="hero">
-        <img src="8948.jpg" alt="Portada Artesano del Campo" width="768" height="768" />
-        <div class="hero-content">
-          <h2>Tu carta con imágenes reales, no placeholders.</h2>
-          <p>Para que se vean en tu página, usa los nombres de archivo exactos y deja el HTML en la misma carpeta donde están las fotos.</p>
-          <div class="hero-pills">
-            <div class="hero-pill">Imágenes reales</div>
-            <div class="hero-pill">Carrito corregido</div>
-            <div class="hero-pill">Diseño pro móvil</div>
-          </div>
+        <div class="badges-container">
+            <span class="badge">Diseño móvil</span>
+            <span class="badge">Carrito mejorado</span>
+            <span class="badge">Pedido por WhatsApp</span>
         </div>
-      </div>
     </header>
 
     <main>
-      <div class="tabs-wrap">
-        <nav class="tabs" aria-label="Categorías">
-          <button class="tab-btn active" type="button" data-target="empanadas">Empanadas</button>
-          <button class="tab-btn" type="button" data-target="panaderia">Panadería</button>
-          <button class="tab-btn" type="button" data-target="pasteleria">Pastelería</button>
-          <button class="tab-btn" type="button" data-target="bebidas">Bebidas</button>
-        </nav>
-      </div>
-
-      <section class="section" id="empanadas">
-        <div class="section-head">
-          <h3>Empanadas</h3>
-          <span>$2.500 c/u</span>
+        <!-- ================= EMPANADAS ================= -->
+        <div class="categoria-titulo">
+            <span>🥟 Empanadas</span>
+            <span class="categoria-sub">$2.500 c/u</span>
         </div>
-        <div class="product-list" id="list-empanadas"></div>
-      </section>
+        <div class="grilla-productos">
+            <div class="tarjeta-producto">
+                <div class="contenedor-foto">
+                    <span class="etiqueta-tag">Tradicional</span>
+                    <img class="foto-real" src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=300" alt="Pino">
+                </div>
+                <div class="info-producto">
+                    <div>
+                        <div class="nombre-producto">Pino</div>
+                        <div class="desc-producto">Carne molida, cebolla, aceituna, huevo y pasas.</div>
+                    </div>
+                    <div>
+                        <div class="precio-producto">$2.500</div>
+                        <button class="btn-agregar" onclick="agregar('Empanada Pino', 2500)">+ Agregar</button>
+                    </div>
+                </div>
+            </div>
 
-      <section class="section" id="panaderia">
-        <div class="section-head">
-          <h3>Panadería</h3>
-          <span>Recetas del campo</span>
-        </div>
-        <div class="product-list" id="list-panaderia"></div>
-      </section>
+            <div class="tarjeta-producto">
+                <div class="contenedor-foto">
+                    <span class="etiqueta-tag">Casera</span>
+                    <img class="foto-real" src="https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=300" alt="Pollo">
+                </div>
+                <div class="info-producto">
+                    <div>
+                        <div class="nombre-producto">Pollo</div>
+                        <div class="desc-producto">Empanada de pollo estilo casero.</div>
+                    </div>
+                    <div>
+                        <div class="precio-producto">$2.500</div>
+                        <button class="btn-agregar" onclick="agregar('Empanada Pollo', 2500)">+ Agregar</button>
+                    </div>
+                </div>
+            </div>
 
-      <section class="section" id="pasteleria">
-        <div class="section-head">
-          <h3>Pastelería</h3>
-          <span>Dulces artesanales</span>
-        </div>
-        <div class="product-list" id="list-pasteleria"></div>
-      </section>
+            <div class="tarjeta-producto">
+                <div class="contenedor-foto">
+                    <span class="etiqueta-tag">Especial</span>
+                    <img class="foto-real" src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=300" alt="Champiñón Queso">
+                </div>
+                <div class="info-producto">
+                    <div>
+                        <div class="nombre-producto">Champiñón Queso</div>
+                        <div class="desc-producto">Champiñón con queso derretido.</div>
+                    </div>
+                    <div>
+                        <div class="precio-producto">$2.500</div>
+                        <button class="btn-agregar" onclick="agregar('Empanada Champ. Queso', 2500)">+ Agregar</button>
+                    </div>
+                </div>
+            </div>
 
-      <section class="section" id="bebidas">
-        <div class="section-head">
-          <h3>Bebidas</h3>
-          <span>Acompañamientos</span>
+            <div class="tarjeta-producto">
+                <div class="contenedor-foto">
+                    <span class="etiqueta-tag">Popular</span>
+                    <img class="foto-real" src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=300" alt="Napolitana">
+                </div>
+                <div class="info-producto">
+                    <div>
+                        <div class="nombre-producto">Napolitana</div>
+                        <div class="desc-producto">Queso, jamón, tomate, aceitunas negras y orégano.</div>
+                    </div>
+                    <div>
+                        <div class="precio-producto">$2.500</div>
+                        <button class="btn-agregar" onclick="agregar('Empanada Napolitana', 2500)">+ Agregar</button>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="product-list" id="list-bebidas"></div>
-      </section>
+
+        <!-- ================= PANADERÍA ================= -->
+        <div class="categoria-titulo">
+            <span>🥖 Panadería</span>
+            <span class="categoria-sub">Hecho al día</span>
+        </div>
+        <div class="grilla-productos">
+            <div class="tarjeta-producto">
+                <div class="contenedor-foto">
+                    <span class="etiqueta-tag">Campo</span>
+                    <img class="foto-real" src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300" alt="Pan Amasado">
+                </div>
+                <div class="info-producto">
+                    <div>
+                        <div class="nombre-producto">Pan Amasado</div>
+                        <div class="desc-producto">Pan casero recién horneado.</div>
+                    </div>
+                    <div>
+                        <div class="precio-producto">$200</div>
+                        <button class="btn-agregar" onclick="agregar('Pan Amasado', 200)">+ Agregar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tarjeta-producto">
+                <div class="contenedor-foto">
+                    <span class="etiqueta-tag">Crocante</span>
+                    <img class="foto-real" src="https://images.unsplash.com/photo-1589367920969-ab8e050bbb04?w=300" alt="Dobladitas">
+                </div>
+                <div class="info-producto">
+                    <div>
+                        <div class="nombre-producto">Dobladitas</div>
+                        <div class="desc-producto">Masa dorada, ideal para acompañar.</div>
+                    </div>
+                    <div>
+                        <div class="precio-producto">$250</div>
+                        <button class="btn-agregar" onclick="agregar('Dobladita', 250)">+ Agregar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tarjeta-producto">
+                <div class="contenedor-foto">
+                    <span class="etiqueta-tag">Rústica</span>
+                    <img class="foto-real" src="https://images.unsplash.com/photo-1565495575440-27f12e5669f9?w=300" alt="Tortilla c/Chicharrones">
+                </div>
+                <div class="info-producto">
+                    <div>
+                        <div class="nombre-producto">Tortilla con Chicharrones</div>
+                        <div class="desc-producto">Receta tradicional y contundente.</div>
+                    </div>
+                    <div>
+                        <div class="precio-producto">$2.500</div>
+                        <button class="btn-agregar" onclick="agregar('Tortilla c/Chicharrones', 2500)">+ Agregar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tarjeta-producto">
+                <div class="contenedor-foto">
+                    <span class="etiqueta-tag">Clásica</span>
+                    <img class="foto-real" src="https://images.unsplash.com/photo-1549931319-a545dcf3bc73?w=300" alt="Tortilla s/Chicharrones">
+                </div>
+                <div class="info-producto">
+                    <div>
+                        <div class="nombre-producto">Tortilla sin Chicharrones</div>
+                        <div class="desc-producto">Tortilla casera en versión tradicional.</div>
+                    </div>
+                    <div>
+                        <div class="precio-producto">$2.500</div>
+                        <button class="btn-agregar" onclick="agregar('Tortilla s/Chicharrones', 2500)">+ Agregar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= PASTELERÍA ================= -->
+        <div class="categoria-titulo">
+            <span>🍰 Pastelería</span>
+            <span class="categoria-sub">Dulces artesanales</span>
+        </div>
+        <div class="grilla-productos">
+            <div class="tarjeta-producto">
+                <div class="contenedor-foto">
+                    <span class="etiqueta-tag">Casero</span>
+                    <img class="foto-real" src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=300" alt="Queque">
+                </div>
+                <div class="info-producto">
+                    <div>
+                        <div class="nombre-producto">Queque</div>
+                        <div class="desc-producto">Perfecto para compartir.</div>
+                    </div>
+                    <div>
+                        <div class="precio-producto">$3.500</div>
+                        <button class="btn-agregar" onclick="agregar('Queque', 3500)">+ Agregar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tarjeta-producto">
+                <div class="contenedor-foto">
+                    <span class="etiqueta-tag">Dulce</span>
+                    <img class="foto-real" src="https://images.unsplash.com/photo-1587314168485-3236d6710814?w=300" alt="Chilenitos">
+                </div>
+                <div class="info-producto">
+                    <div>
+                        <div class="nombre-producto">Chilenitos</div>
+                        <div class="desc-producto">Clásicos para la once o postre.</div>
+                    </div>
+                    <div>
+                        <div class="precio-producto">$700</div>
+                        <button class="btn-agregar" onclick="agregar('Chilenito', 700)">+ Agregar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= BEBIDAS ================= -->
+        <div class="categoria-titulo">
+            <span>🥤 Bebidas</span>
+            <span class="categoria-sub">Acompañamientos</span>
+        </div>
+        <div class="grilla-productos">
+            <div class="tarjeta-producto">
+                <div class="contenedor-foto">
+                    <span class="etiqueta-tag">Frío</span>
+                    <img class="foto-real" src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=300" alt="Bebida Lata">
+                </div>
+                <div class="info-producto">
+                    <div>
+                        <div class="nombre-producto">Bebida Lata 350cc</div>
+                        <div class="desc-producto">Formato individual.</div>
+                    </div>
+                    <div>
+                        <div class="precio-producto">$1.200</div>
+                        <button class="btn-agregar" onclick="agregar('Bebida Lata 350cc', 1200)">+ Agregar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tarjeta-producto">
+                <div class="contenedor-foto">
+                    <span class="etiqueta-tag">Refrescante</span>
+                    <img class="foto-real" src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=300" alt="Bebida Botella">
+                </div>
+                <div class="info-producto">
+                    <div>
+                        <div class="nombre-producto">Bebida Botella 500cc</div>
+                        <div class="desc-producto">Ideal para una porción.</div>
+                    </div>
+                    <div>
+                        <div class="precio-producto">$1.700</div>
+                        <button class="btn-agregar" onclick="agregar('Bebida 500cc', 1700)">+ Agregar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tarjeta-producto">
+                <div class="contenedor-foto">
+                    <span class="etiqueta-tag">Familiar</span>
+                    <img class="foto-real" src="https://images.unsplash.com/photo-1629203851122-3726ecdf0804?w=300" alt="Bebida 1.5L">
+                </div>
+                <div class="info-producto">
+                    <div>
+                        <div class="nombre-producto">Bebida 1.5 Litros</div>
+                        <div class="desc-producto">Para compartir.</div>
+                    </div>
+                    <div>
+                        <div class="precio-producto">$2.500</div>
+                        <button class="btn-agregar" onclick="agregar('Bebida 1.5L', 2500)">+ Agregar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tarjeta-producto">
+                <div class="contenedor-foto">
+                    <span class="etiqueta-tag">Natural</span>
+                    <img class="foto-real" src="https://images.unsplash.com/photo-1613478223719-2ab802602423?w=300" alt="Jugo">
+                </div>
+                <div class="info-producto">
+                    <div>
+                        <div class="nombre-producto">Jugo 1.5 Litros</div>
+                        <div class="desc-producto">Opción frutal para compartir.</div>
+                    </div>
+                    <div>
+                        <div class="precio-producto">$2.500</div>
+                        <button class="btn-agregar" onclick="agregar('Jugo 1.5L', 2500)">+ Agregar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
-  </div>
 
-  <aside class="cart-panel" aria-label="Carrito de compras flotante">
-    <div class="cart-head">
-      <h4>Tu pedido</h4>
-      <div class="cart-count" id="cartCountLabel">0 productos</div>
+    <!-- BARRA FLOTANTE -->
+    <div class="barra-carrito" id="barra-carrito" onclick="abrirCarrito()">
+        <div>🛒 Pedido actual (<span id="cantidad-total">0</span>)</div>
+        <div id="precio-total-barra">$0</div>
     </div>
 
-    <div class="cart-items" id="cartItems">
-      <div class="empty-cart">Aún no agregas productos. Selecciona algo del menú para empezar.</div>
-    </div>
+    <!-- MODAL CARRITO -->
+    <div class="modal-fondo" id="modal-carrito">
+        <div class="modal-contenido">
+            <div class="modal-cabecera">
+                <h2>Tu Pedido</h2>
+                <button class="btn-cerrar" onclick="cerrarCarrito()">✕</button>
+            </div>
+            
+            <div id="lista-carrito"></div>
 
-    <div class="delivery-wrap">
-      <div class="control-title">Tipo de entrega</div>
-      <div class="delivery-options">
-        <button class="delivery-btn active" type="button" id="pickupBtn">
-          <strong>Retiro en Local</strong>
-          <span>Pasas a buscar tu pedido.</span>
-        </button>
-        <button class="delivery-btn" type="button" id="deliveryBtn">
-          <strong>Envío a Domicilio</strong>
-          <span>Se pedirá dirección obligatoria.</span>
-        </button>
-      </div>
-    </div>
+            <div class="opciones-entrega">
+                <button class="btn-entrega activo" id="btn-retiro" onclick="seleccionarEntrega('Retiro en local')">🏬 Retiro</button>
+                <button class="btn-entrega" id="btn-delivery" onclick="seleccionarEntrega('Delivery')">🛵 Delivery</button>
+            </div>
+            
+            <input type="text" id="input-direccion" class="campo-direccion" placeholder="Escribe tu dirección, comuna y una referencia para entregar.">
+            <p class="nota-delivery" id="nota-delivery">Retiras en nuestro local.</p>
 
-    <div class="address-wrap" id="addressWrap">
-      <div class="field">
-        <label for="deliveryAddress">Dirección</label>
-        <textarea id="deliveryAddress" placeholder="Ej: calle, número, comuna y referencia"></textarea>
-      </div>
-    </div>
+            <div class="total-final">
+                <span>Total:</span>
+                <span id="precio-total-modal">$0</span>
+            </div>
 
-    <div class="cart-footer">
-      <div class="totals">
-        <div class="total-row">
-          <span>Subtotal</span>
-          <strong id="subtotalValue">$0</strong>
+            <button class="btn-whatsapp" onclick="enviarWhatsApp()">📲 Enviar por WhatsApp</button>
+            <p class="whatsapp-nota">Cambia el número de WhatsApp desde el código si quieres usar otro destino.</p>
         </div>
-        <div class="total-row">
-          <span>Total</span>
-          <strong id="totalValue">$0</strong>
-        </div>
-      </div>
-
-      <button class="checkout-btn" id="sendOrderBtn" type="button" disabled>
-        Enviar Pedido por WhatsApp
-      </button>
-
-      <div class="helper">
-        Importante: guarda este HTML en la misma carpeta que las fotos 8941.jpg, 8942.jpg, 8943.jpg, 8944.jpg, 8945.jpg, 8947.jpg, 8948.jpg, 8950.jpg, 8952.jpg y 8955.jpg.
-      </div>
     </div>
-  </aside>
 
-  <script>
-    const PRODUCTS = [
-      { id: "pino", category: "empanadas", name: "Pino", description: "Carne molida, cebolla, aceituna, huevo y pasas.", price: 2500, image: "8955.jpg", tag: "Empanada" },
-      { id: "napolitana", category: "empanadas", name: "Napolitana", description: "Queso, jamón, tomate, aceitunas negras y pizca de orégano.", price: 2500, image: "8941.jpg", tag: "Empanada" },
-      { id: "pochoclo", category: "empanadas", name: "Pochoclo", description: "Pollo, choclo, queso y aceitunas negras.", price: 2500, image: "8943.jpg", tag: "Empanada" },
-      { id: "champinon", category: "empanadas", name: "Champiñón", description: "Champiñón y queso.", price: 2500, image: "8944.jpg", tag: "Empanada" },
+    <!-- JAVASCRIPT -->
+    <script>
+        let carrito = {};
+        let totalDinero = 0;
+        let opcionEntrega = 'Retiro en local';
 
-      { id: "pan-amasado", category: "panaderia", name: "Pan Amasado", description: "Pan amasado tradicional recién horneado.", price: 200, image: "8945.jpg", tag: "Panadería" },
-      { id: "dobladitas", category: "panaderia", name: "Dobladitas", description: "Dobladitas doradas, ideales para acompañar.", price: 250, image: "8942.jpg", tag: "Panadería" },
-      { id: "tortilla-chicharrones", category: "panaderia", name: "Tortilla con Chicharrones", description: "Tortilla casera con chicharrones.", price: 2500, image: "8952.jpg", tag: "Panadería" },
-      { id: "tortilla-sin-chicharrones", category: "panaderia", name: "Tortilla sin Chicharrones", description: "Tortilla casera tradicional.", price: 2500, image: "8950.jpg", tag: "Panadería" },
+        function agregar(nombre, precio) {
+            if (carrito[nombre]) {
+                carrito[nombre].cantidad += 1;
+            } else {
+                carrito[nombre] = { precio: precio, cantidad: 1 };
+            }
+            actualizarCarrito();
+        }
 
-      { id: "queque", category: "pasteleria", name: "Queque", description: "Queque casero para compartir.", price: 3500, image: "8947.jpg", tag: "Pastelería" },
-      { id: "chilenitos", category: "pasteleria", name: "Chilenitos", description: "Chilenitos dulces para acompañar la once.", price: 700, image: "8950.jpg", tag: "Pastelería" },
+        function modificarCantidad(nombre, delta) {
+            carrito[nombre].cantidad += delta;
+            if (carrito[nombre].cantidad <= 0) {
+                delete carrito[nombre];
+            }
+            actualizarCarrito();
+        }
 
-      { id: "bebida-lata", category: "bebidas", name: "Bebida en Lata (350 cc)", description: "Bebida individual en lata.", price: 1300, image: "8948.jpg", tag: "Bebida" },
-      { id: "bebida-botella", category: "bebidas", name: "Bebida en Botella (500 cc)", description: "Bebida individual en botella.", price: 1700, image: "8948.jpg", tag: "Bebida" }
-    ];
+        function eliminarProducto(nombre) {
+            delete carrito[nombre];
+            actualizarCarrito();
+        }
 
-    const state = {
-      cart: {},
-      deliveryType: "Retiro en Local"
-    };
+        function actualizarCarrito() {
+            let listaHTML = '';
+            totalDinero = 0;
+            let totalItems = 0;
 
-    const lists = {
-      empanadas: document.getElementById("list-empanadas"),
-      panaderia: document.getElementById("list-panaderia"),
-      pasteleria: document.getElementById("list-pasteleria"),
-      bebidas: document.getElementById("list-bebidas")
-    };
+            for (let producto in carrito) {
+                let item = carrito[producto];
+                let subtotal = item.precio * item.cantidad;
+                totalDinero += subtotal;
+                totalItems += item.cantidad;
 
-    const cartItemsEl = document.getElementById("cartItems");
-    const headerCartCountEl = document.getElementById("headerCartCount");
-    const cartCountLabelEl = document.getElementById("cartCountLabel");
-    const subtotalValueEl = document.getElementById("subtotalValue");
-    const totalValueEl = document.getElementById("totalValue");
-    const pickupBtn = document.getElementById("pickupBtn");
-    const deliveryBtn = document.getElementById("deliveryBtn");
-    const addressWrap = document.getElementById("addressWrap");
-    const addressInput = document.getElementById("deliveryAddress");
-    const sendOrderBtn = document.getElementById("sendOrderBtn");
+                listaHTML += `
+                <div class="item-carrito">
+                    <div>
+                        <div style="font-weight:bold;">${producto}</div>
+                        <div style="font-size:0.75rem; color:#aaa;">$${item.precio} c/u • Subtotal $${subtotal}</div>
+                    </div>
+                    <div class="controles-cantidad">
+                        <button class="btn-cant" onclick="modificarCantidad('${producto}', -1)">-</button>
+                        <span>${item.cantidad}</span>
+                        <button class="btn-cant" onclick="modificarCantidad('${producto}', 1)">+</button>
+                        <button class="btn-eliminar-item" onclick="eliminarProducto('${producto}')" title="Borrar">🗑️</button>
+                    </div>
+                </div>`;
+            }
 
-    const formatCLP = value => new Intl.NumberFormat("es-CL", {
-      style: "currency",
-      currency: "CLP",
-      maximumFractionDigits: 0
-    }).format(value);
+            document.getElementById('lista-carrito').innerHTML = listaHTML;
+            document.getElementById('cantidad-total').innerText = totalItems;
+            document.getElementById('precio-total-barra').innerText = '$' + totalDinero;
+            document.getElementById('precio-total-modal').innerText = '$' + totalDinero;
 
-    const getQty = id => state.cart[id] || 0;
+            if (totalItems > 0) {
+                document.getElementById('barra-carrito').style.display = 'flex';
+            } else {
+                document.getElementById('barra-carrito').style.display = 'none';
+                cerrarCarrito();
+            }
+        }
 
-    const getCartCount = () =>
-      Object.values(state.cart).reduce((sum, qty) => sum + qty, 0);
+        function seleccionarEntrega(tipo) {
+            opcionEntrega = tipo;
+            document.getElementById('btn-retiro').classList.remove('activo');
+            document.getElementById('btn-delivery').classList.remove('activo');
+            
+            let inputDir = document.getElementById('input-direccion');
+            
+            if (tipo === 'Retiro en local') {
+                document.getElementById('btn-retiro').classList.add('activo');
+                document.getElementById('nota-delivery').innerText = 'Retiras en nuestro local.';
+                inputDir.style.display = 'none';
+            } else {
+                document.getElementById('btn-delivery').classList.add('activo');
+                document.getElementById('nota-delivery').innerText = 'El valor del envío se informará por WhatsApp.';
+                inputDir.style.display = 'block';
+            }
+        }
 
-    const getTotal = () =>
-      PRODUCTS.reduce((sum, product) => sum + product.price * getQty(product.id), 0);
+        function abrirCarrito() { document.getElementById('modal-carrito').style.display = 'flex'; }
+        function cerrarCarrito() { document.getElementById('modal-carrito').style.display = 'none'; }
 
-    function renderProducts() {
-      Object.entries(lists).forEach(([category, container]) => {
-        const items = PRODUCTS.filter(product => product.category === category);
+        function enviarWhatsApp() {
+            let texto = `🌾 *NUEVO PEDIDO - ARTESANO DEL CAMPO*\n\n`;
+            for (let p in carrito) {
+                texto += `• ${carrito[p].cantidad}x ${p} ($${carrito[p].precio * carrito[p].cantidad})\n`;
+            }
+            texto += `\n*Total Productos:* $${totalDinero}\n`;
+            texto += `*Método:* ${opcionEntrega}\n`;
+            
+            if (opcionEntrega === 'Delivery') {
+                let direccion = document.getElementById('input-direccion').value;
+                texto += `*Dirección:* ${direccion ? direccion : 'No especificada'}\n`;
+            } else {
+                texto += `*Retiro en local* Gracias.\n`;
+            }
 
-        container.innerHTML = items.map(product => `
-          <article class="product-card">
-            <div class="product-media">
-              <img src="${product.image}" alt="${product.name}" width="768" height="768" loading="lazy" />
-              <div class="product-tag">${product.tag}</div>
-            </div>
-
-            <div class="product-info">
-              <div class="product-top">
-                <div class="product-name">${product.name}</div>
-                <div class="product-price">${formatCLP(product.price)}</div>
-              </div>
-
-              <div class="product-desc">${product.description}</div>
-
-              <div class="product-actions">
-                <div class="qty" aria-label="Cantidad de ${product.name}">
-                  <button class="qty-btn" type="button" onclick="changeQty('${product.id}', -1)">−</button>
-                  <span class="qty-value">${getQty(product.id)}</span>
-                  <button class="qty-btn" type="button" onclick="changeQty('${product.id}', 1)">+</button>
-                </div>
-
-                <button class="add-btn" type="button" onclick="changeQty('${product.id}', 1)">
-                  Agregar
-                </button>
-              </div>
-            </div>
-          </article>
-        `).join("");
-      });
-    }
-
-    function renderCart() {
-      const items = PRODUCTS.filter(product => getQty(product.id) > 0);
-
-      if (!items.length) {
-        cartItemsEl.innerHTML = `<div class="empty-cart">Aún no agregas productos. Selecciona algo del menú para empezar.</div>`;
-      } else {
-        cartItemsEl.innerHTML = items.map(product => {
-          const qty = getQty(product.id);
-          const itemTotal = qty * product.price;
-
-          return `
-            <div class="cart-item">
-              <div>
-                <div class="cart-item-name">${product.name}</div>
-                <div class="cart-item-meta">${qty} x ${formatCLP(product.price)}</div>
-                <div class="cart-item-controls">
-                  <button class="mini-btn" type="button" onclick="changeQty('${product.id}', -1)">−</button>
-                  <strong>${qty}</strong>
-                  <button class="mini-btn" type="button" onclick="changeQty('${product.id}', 1)">+</button>
-                </div>
-              </div>
-              <div class="cart-item-total">${formatCLP(itemTotal)}</div>
-            </div>
-          `;
-        }).join("");
-      }
-
-      const count = getCartCount();
-      const total = getTotal();
-
-      headerCartCountEl.textContent = count;
-      cartCountLabelEl.textContent = `${count} ${count === 1 ? "producto" : "productos"}`;
-      subtotalValueEl.textContent = formatCLP(total);
-      totalValueEl.textContent = formatCLP(total);
-      sendOrderBtn.disabled = count === 0;
-    }
-
-    function renderDelivery() {
-      const isDelivery = state.deliveryType === "Envío a Domicilio";
-      pickupBtn.classList.toggle("active", !isDelivery);
-      deliveryBtn.classList.toggle("active", isDelivery);
-      addressWrap.classList.toggle("visible", isDelivery);
-    }
-
-    function updateUI() {
-      renderProducts();
-      renderCart();
-      renderDelivery();
-    }
-
-    function changeQty(id, delta) {
-      const nextQty = Math.max(0, getQty(id) + delta);
-
-      if (nextQty === 0) {
-        delete state.cart[id];
-      } else {
-        state.cart[id] = nextQty;
-      }
-
-      updateUI();
-    }
-
-    function setDelivery(type) {
-      state.deliveryType = type;
-      renderDelivery();
-    }
-
-    function buildWhatsAppMessage() {
-      const items = PRODUCTS.filter(product => getQty(product.id) > 0);
-      const total = getTotal();
-      const isDelivery = state.deliveryType === "Envío a Domicilio";
-      const address = addressInput.value.trim();
-
-      if (!items.length) {
-        alert("Agrega al menos un producto al carrito.");
-        return null;
-      }
-
-      if (isDelivery && !address) {
-        alert("Debes ingresar la dirección para el envío a domicilio.");
-        addressInput.focus();
-        return null;
-      }
-
-      const lines = items.map(product => {
-        const qty = getQty(product.id);
-        return `• ${product.name} x${qty} — ${formatCLP(product.price * qty)}`;
-      }).join("
-");
-
-      return `Hola, quiero hacer el siguiente pedido en Artesano del Campo:
-
-${lines}
-
-Tipo de entrega: ${state.deliveryType}
-${isDelivery ? `Dirección: ${address}
-` : ""}Total: ${formatCLP(total)}
-
-Quedo atento/a a la confirmación.`;
-    }
-
-    function sendOrder() {
-      const message = buildWhatsAppMessage();
-      if (!message) return;
-
-      const whatsappNumber = "56956139055";
-      const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-      window.open(url, "_blank", "noopener,noreferrer");
-    }
-
-    document.querySelectorAll(".tab-btn").forEach(button => {
-      button.addEventListener("click", () => {
-        document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
-        button.classList.add("active");
-        const target = document.getElementById(button.dataset.target);
-        target.scrollIntoView({ behavior: "smooth", block: "start" });
-      });
-    });
-
-    pickupBtn.addEventListener("click", () => setDelivery("Retiro en Local"));
-    deliveryBtn.addEventListener("click", () => setDelivery("Envío a Domicilio"));
-    sendOrderBtn.addEventListener("click", sendOrder);
-
-    if ("serviceWorker" in navigator) {
-      const swCode = `
-        const CACHE_NAME = "artesano-del-campo-img-pwa-v3";
-        self.addEventListener("install", event => {
-          self.skipWaiting();
-          event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(["./"])));
-        });
-        self.addEventListener("activate", event => {
-          event.waitUntil(
-            caches.keys().then(keys =>
-              Promise.all(keys.map(key => key !== CACHE_NAME ? caches.delete(key) : null))
-            ).then(() => self.clients.claim())
-          );
-        });
-        self.addEventListener("fetch", event => {
-          if (event.request.method !== "GET") return;
-          event.respondWith(
-            caches.match(event.request).then(cached =>
-              cached || fetch(event.request)
-                .then(response => {
-                  const copy = response.clone();
-                  caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
-                  return response;
-                })
-                .catch(() => caches.match("./"))
-            )
-          );
-        });
-      `;
-      const blob = new Blob([swCode], { type: "text/javascript" });
-      const swUrl = URL.createObjectURL(blob);
-      navigator.serviceWorker.register(swUrl).catch(() => {});
-    }
-
-    updateUI();
-    window.changeQty = changeQty;
-  </script>
+            let tuNumero = "56912345678"; // <--- CAMBIA ESTO POR TU NÚMERO DE WHATSAPP REAL
+            let url = `https://wa.me/${tuNumero}?text=${encodeURIComponent(texto)}`;
+            window.open(url, '_blank');
+        }
+    </script>
 </body>
 </html>
